@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>逐组记录 v2 · 资深老铁特化版</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<!--
+  记录页 v2 优化版（融合十年老铁实战体验）：
+  1. 砍掉低效冗余的「感受标签」，输入聚焦于核心三要素：重量 × 次数 @ RPE
+  2. 底部重构为「悬浮常驻休息仓 (Floating Rest Dock)」：
+     - 不随滚动消失，大号倒计时与下一组预告常驻
+     - 支持 ±15s 精准颗粒度双向微调
+     - 提供「立即开练 / 跳过」一键提前开练
+  3. 新增「直输数字大键盘与快捷片 (Gym Number Pad)」：告别手汗连续点 20 次加号
+  4. 新增「单侧动作弱侧保护 (Unilateral Balance)」：左/右分别记录，弱侧定有效正式组
+  5. 新增「历史天花板 (All-Time PR)」与「上次同组镜像 (Ghost Set)」双重对标
+  6. 新增「超级组 (Superset)」下个动作预告与穿插
+  7. 组条区分热身与正式组、杠铃片算盘、孔位备忘及器械被占一键替换
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <div class="screen">
+    <!-- 顶部留白 = 状态栏 44 + 胶囊 46 -->
+    <div style="padding-top:90px">
+      <div class="row" style="padding:10px 100px 6px 16px">
+        <span style="font-size:19px;color:var(--text-secondary);cursor:pointer" onclick="handleExitRecord()">✕</span>
+        <div style="width:14px"></div>
+        <a class="t15 pri grow" href="summary.html" style="text-decoration:none">结束并记录</a>
+      </div>
+
+      <!-- 本次已练时长与组数进度 -->
+      <div class="row px16">
+        <span class="t13 sec grow">已完成 6 / 17 组位（含热身）</span>
+        <span class="t12 pri bold" style="cursor:pointer;margin-right:10px" onclick="toggleSwapAction()">⇄ 调换动作 (器械被占)</span>
+        <span class="sess-clock">42:10</span>
+      </div>
+      <div class="sp8"></div>
+      <div class="px16"><div class="thin-progress"><i style="width:35.3%"></i></div></div>
+      <div class="sp12"></div>
+
+      <!-- 晚高峰器械避让抽屉 -->
+      <div class="px16" id="actionSwapSheet" style="display:none">
+        <div class="action-swap-sheet">
+          <div class="row">
+            <span class="t13 bold" style="color:var(--primary)">🔄 晚高峰器械避让 · 临时调换顺序</span>
+            <span class="t12 faint" style="cursor:pointer" onclick="toggleSwapAction()">✕ 关闭</span>
+          </div>
+          <div class="sp4"></div>
+          <div class="t12 sec">深蹲架/器械有人排队？先练有空位的动作，自动顺延：</div>
+          <div class="sp4"></div>
+          <div class="t12 pri">✅ 提示：周期归档强绑定动作 ID，临时调换顺序绝不影响 8 次递进图表。</div>
+          <div class="swap-action-row">1. 颈前深蹲 (深蹲架被占 · 待练)</div>
+          <div class="swap-action-row active">2. 保加利亚分腿蹲 (当前正在进行)</div>
+          <div class="swap-action-row">3. 单腿哑铃硬拉 (已完成 ✓)</div>
+          <div class="swap-action-row" onclick="alert('已将「罗马尼亚硬拉」提前至当前进行！')">4. 罗马尼亚硬拉 (杠铃区空出 ➔ 提前做 ›)</div>
+        </div>
+        <div class="sp10"></div>
+      </div>
+    </div>
+
+    <!-- 突破个人极限 PR 暗金高光激励卡 -->
+    <div class="px16">
+      <div class="pr-glow-card">
+        <div class="row">
+          <span style="font-size:22px">👑</span>
+          <div class="col grow" style="margin-left:10px">
+            <div class="row">
+              <span class="t14 bold" style="color:#92400e">NEW PR 突破！刷新历史记录</span>
+              <span class="badge round" style="background:#f59e0b;color:#fff;font-size:10px;font-weight:800;padding:2px 6px;margin-left:auto">+1 次 🚀</span>
+            </div>
+            <div class="sp3"></div>
+            <span class="t12" style="color:#b45309">第 2 组完成 22.5 kg × 11 / 只，较上次多 1 次！已触发三道强振动激励。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 当前动作标题与组条 -->
+    <div class="px16">
+      <div class="row">
+        <span class="t13 semi pri grow">当前进行 · 腿日</span>
+        <span class="t13 faint">4 组 × 10 次 · RPE 8</span>
+      </div>
+      <div class="sp6"></div>
+      <div class="row">
+        <div class="ex-title grow">保加利亚分腿蹲</div>
+        <span class="pain-free-pill" onclick="togglePainFree()">🩹 关节不适换变式 ›</span>
+      </div>
+      <div class="sp8"></div>
+
+      <!-- 无痛安全变式推荐抽屉 -->
+      <div class="pain-free-drawer" id="painFreeDrawer" style="display:none">
+        <div class="row">
+          <span class="t13 bold" style="color:var(--primary)">🛡️ 膝关节/髋部友好 · 推荐无痛变式</span>
+          <span class="t12 faint" style="cursor:pointer" onclick="togglePainFree()">✕ 关闭</span>
+        </div>
+        <div class="sp4"></div>
+        <div class="t12 sec">若膝前侧髌腱或髋屈肌紧张，可一键切换为低压变式：</div>
+        
+        <div class="swap-item" onclick="alert('已替换为：哑铃后撤箭步蹲 (20kg)')">
+          <div class="col grow">
+            <span class="t13 semi">① 哑铃后撤箭步蹲 (Reverse Lunge)</span>
+            <span class="t12 faint">重心更易控制，大幅降低膝盖剪切力 · 建议 20 kg</span>
+          </div>
+          <span class="t12 pri bold">替换 ›</span>
+        </div>
+
+        <div class="swap-item" onclick="alert('已替换为：坐姿倒蹬机 (110kg)')">
+          <div class="col grow">
+            <span class="t13 semi">② 坐姿倒蹬机 (Leg Press)</span>
+            <span class="t12 faint">完全卸除躯干平衡与下背压力 · 建议 110 kg</span>
+          </div>
+          <span class="t12 pri bold">替换 ›</span>
+        </div>
+      </div>
+
+      <!-- 动作孔位 / 技术备忘 -->
+      <div class="memo-box">
+        <span class="memo-text">📌 备忘：卧推凳平放，后脚背垫平，躯干前倾20°找臀感</span>
+        <a class="t13 pri memo-action" href="exercise-edit.html">编辑</a>
+      </div>
+      <div class="sp10"></div>
+
+      <!-- 组进度条：热身组虚线框，正式组实线框 -->
+      <div class="set-strip">
+        <div class="cell warm"><div class="n">热身1</div><div class="d">自重×10</div></div>
+        <div class="cell warm"><div class="n">热身2</div><div class="d">12.5×5</div></div>
+        <div class="cell logged"><div class="n">第 1 组</div><div class="d">20×12</div></div>
+        <div class="cell current"><div class="n">第 2 组</div><div class="d">22.5×11</div></div>
+        <div class="cell"><div class="n">第 3 组</div><div class="d">22.5</div></div>
+        <div class="cell"><div class="n">第 4 组</div><div class="d">—</div></div>
+        <div class="cell warm"><div class="n">加组</div><div class="d">+</div></div>
+      </div>
+      <div class="sp10"></div>
+
+      <!-- 科学热身阶梯快捷条 -->
+      <div class="warm-banner">
+        <span>⚡ 正式组 22.5kg：已生成 2 组渐进热身</span>
+        <span class="btn" onclick="toggleWarmupLadder()">🪜 查看热身阶梯</span>
+      </div>
+
+      <!-- 科学热身阶梯详情卡 -->
+      <div class="warmup-ladder-box" id="warmupLadderBox" style="display:none">
+        <div class="row">
+          <span class="t12 bold" style="color:var(--text-primary)">🪜 科学热身阶梯 (不消耗能量)</span>
+          <span class="t12 faint" style="cursor:pointer" onclick="toggleWarmupLadder()">✕</span>
+        </div>
+        <div class="ladder-step">
+          <span class="k">热身 1 (润滑关节)</span>
+          <span class="v">自重 × 10 次 · 休息 30s</span>
+        </div>
+        <div class="ladder-step">
+          <span class="k">热身 2 (50% 激活)</span>
+          <span class="v">12.5 kg × 5 次 · 休息 45s</span>
+        </div>
+        <div class="ladder-step">
+          <span class="k">热身 3 (75% 神经充能)</span>
+          <span class="v">17.5 kg × 2 次 · 休息 60s</span>
+        </div>
+      </div>
+      <div class="sp14"></div>
+    </div>
+
+    <!-- 本组输入卡：重量、次数、RPE -->
+    <div class="px16">
+      <div class="s-card p0">
+        <!-- 重量输入 + 键盘直输入口 + 挂片指南 -->
+        <div style="padding:16px">
+          <div class="row">
+            <span class="stepper-label grow">本组重量</span>
+            <span class="t12 pri bold" style="cursor:pointer;margin-right:8px" onclick="togglePlateLoader()">🧮 挂片方案</span>
+            <span class="t12 pri bold" style="cursor:pointer" onclick="openNumpad()">⌨️ 键盘直输</span>
+            <span class="unit-tag" style="margin-left:8px">kg / 只</span>
+          </div>
+          <div class="sp8"></div>
+          <div class="stepper-row">
+            <button class="step-btn" onclick="stepWeight(-2.5)">−</button>
+            <span class="big-value" id="mainWeightDisplay" style="cursor:pointer" onclick="openNumpad()">22.5<span class="sub">/ 只</span></span>
+            <button class="step-btn" onclick="stepWeight(2.5)">+</button>
+          </div>
+          <div class="sp8"></div>
+
+          <!-- 杠铃/哑铃彩色装片指引 -->
+          <div class="plate-visual-loader" id="plateVisualLoader" style="display:none">
+            <div class="row">
+              <span class="t12 bold" style="color:var(--text-primary)">🔴 杠铃/哑铃彩色装片方案 (免算盘)</span>
+              <span class="t12 faint" style="cursor:pointer" onclick="togglePlateLoader()">✕</span>
+            </div>
+            <div class="sp4"></div>
+            <div class="t12 sec">若换做杠铃深蹲 70kg (20kg标准杆)，单边只需挂 <b>25kg</b>：</div>
+            <div class="plate-stack">
+              <span class="olympic-plate plate-blue">20 kg 蓝</span>
+              <span class="olympic-plate plate-white">5 kg 白</span>
+              <span class="t12 faint" style="margin-left:6px">+ 20kg 杆 = 70kg</span>
+            </div>
+          </div>
+
+          <!-- 双手合计与说明 -->
+          <div class="plate" id="bothHandsDisplay">双手合计 <b>45 kg</b> · 上次同动作 22.5 / 只</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 次数输入 + 单侧弱侧平衡 + 上次同组镜像 (Ghost Set) + 历史天花板 PR -->
+        <div style="padding:16px">
+          <div class="row">
+            <span class="stepper-label grow">完成次数 (单侧动作)</span>
+            <span class="t13 faint">目标 10–12 次</span>
+          </div>
+          <div class="sp8"></div>
+
+          <!-- 单侧左右分别记录 -->
+          <div class="unilateral-box">
+            <div class="side-cell">
+              <div class="side-lbl">左腿次数</div>
+              <div class="side-val">11</div>
+            </div>
+            <div class="side-cell weak">
+              <div class="side-lbl">右腿次数 (弱侧)</div>
+              <div class="side-val">11</div>
+            </div>
+          </div>
+          <div class="sp6"></div>
+          <div class="t12 faint">⚖️ 单侧原则：以弱侧 11 次为准记录正式组，防肌力失衡</div>
+          <div class="sp10"></div>
+
+          <!-- 上次同组镜像对标 -->
+          <div class="ghost-row">
+            <span class="tag">上次第 2 组</span>
+            <span>22.5 kg × 10 次 · RPE 8.5</span>
+            <span class="delta">🎯 今日目标: +1次</span>
+          </div>
+
+          <!-- 历史天花板 All-Time PR -->
+          <div class="alltime-pr">
+            <span>👑 历史最佳：25 kg × 10 次 (2025/11) · 距巅峰还差 1 档</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- RPE 平铺直选 -->
+        <div style="padding:16px">
+          <div class="row">
+            <span class="stepper-label grow">本组 RPE (自觉竭尽度)</span>
+            <a class="t13 pri" href="principles.html#rpe" style="text-decoration:none">RPE 说明 ›</a>
+          </div>
+          <div class="sp10"></div>
+          <div class="rpe-pick">
+            <div class="lv"><div class="n">6</div><div class="w">剩 4</div></div>
+            <div class="lv"><div class="n">7</div><div class="w">剩 3</div></div>
+            <div class="lv on"><div class="n">8</div><div class="w">剩 2</div></div>
+            <div class="lv"><div class="n">9</div><div class="w">剩 1</div></div>
+            <div class="lv max"><div class="n">10</div><div class="w">力竭</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 自动调节卡片 -->
+    <div class="px16">
+      <div class="auto-reg">
+        <div class="hd">↗ 按上组表现智能建议</div>
+        <div class="bd">
+          第 1 组 <b>20 kg × 12</b> 报了 <b>RPE 7</b>，余量充沛。本组建议加到 <b>22.5 kg</b>。
+        </div>
+        <div class="act">使用建议 22.5 kg</div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 折叠行区：超级组预告 / 替代动作 / 演示 / 周期 -->
+    <div class="px16">
+      <div class="s-card p0">
+        <!-- 超级组穿插预告 -->
+        <div class="fold" style="background:var(--primary-tint)">
+          <span class="ttl" style="color:var(--primary);font-weight:700">⚡ 超级组穿插预告：坐姿提踵</span>
+          <span class="hint">组间休息无缝交替</span>
+          <span class="arw">›</span>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 替代动作（支持一键替换） -->
+        <div class="fold" style="background:#fafafc">
+          <div class="row">
+            <span class="ttl">器械被占？一键替换动作</span>
+            <span class="hint">展开 2 个备选项</span>
+            <span class="arw">▼</span>
+          </div>
+          <div class="sp8"></div>
+          <div class="swap-option">
+            <div class="col">
+              <span class="t14 semi">史密斯分腿蹲</span>
+              <span class="t12 sec" style="margin-top:2px">等效起始建议：45 kg（杠铃双手）</span>
+            </div>
+            <button class="btn">换这个</button>
+          </div>
+          <div class="swap-option">
+            <div class="col">
+              <span class="t14 semi">单腿哑铃硬拉</span>
+              <span class="t12 sec" style="margin-top:2px">等效起始建议：20 kg / 只</span>
+            </div>
+            <button class="btn">换这个</button>
+          </div>
+        </div>
+
+        <div class="divider" style="margin:0 16px"></div>
+        <div class="fold" style="cursor:pointer" onclick="alert('动作要领：保持躯干前倾20°，重心压在脚后跟与足弓，后腿脚背平放卧推凳。')">
+          <span class="ttl">动作演示</span>
+          <span class="hint">首次自动展开</span>
+          <span class="arw">›</span>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+        <a class="fold" href="progression-v2.html" style="text-decoration:none;display:flex;align-items:center">
+          <span class="ttl">本周期递进</span>
+          <span class="hint">第 3 / 8 次</span>
+          <span class="arw">›</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 底部留白 -->
+    <div style="height:140px"></div>
+  </div>
+
+  <!-- 直输大九宫格键盘抽屉 (点击数字呼出) -->
+  <div class="numpad-drawer" id="numpadDrawer" style="display:none">
+    <div class="numpad-header">
+      <span class="t14 bold">设置本组重量 (kg / 只)</span>
+      <span class="t13 pri bold" style="cursor:pointer" onclick="closeNumpad()">确定 ✓</span>
+    </div>
+    <div class="numpad-quick-row">
+      <button class="quick-chip" onclick="quickAddWeight(2.5)">+2.5</button>
+      <button class="quick-chip" onclick="quickAddWeight(5)">+5</button>
+      <button class="quick-chip" onclick="quickAddWeight(10)">+10</button>
+      <button class="quick-chip" onclick="setExactWeight(22.5)">上次 22.5</button>
+      <button class="quick-chip" onclick="setExactWeight(0)">自重 0</button>
+    </div>
+    <div class="numpad-grid">
+      <button class="numpad-key" onclick="appendNum('1')">1</button>
+      <button class="numpad-key" onclick="appendNum('2')">2</button>
+      <button class="numpad-key" onclick="appendNum('3')">3</button>
+      <button class="numpad-key" onclick="appendNum('4')">4</button>
+      <button class="numpad-key" onclick="appendNum('5')">5</button>
+      <button class="numpad-key" onclick="appendNum('6')">6</button>
+      <button class="numpad-key" onclick="appendNum('7')">7</button>
+      <button class="numpad-key" onclick="appendNum('8')">8</button>
+      <button class="numpad-key" onclick="appendNum('9')">9</button>
+      <button class="numpad-key" onclick="appendNum('.')">.</button>
+      <button class="numpad-key" onclick="appendNum('0')">0</button>
+      <button class="numpad-key" style="font-size:18px" onclick="backspaceNum()">⌫</button>
+    </div>
+  </div>
+
+  <!-- 吸底操作区：常驻悬浮休息仓 (Floating Rest Dock) -->
+  <div class="sticky-bar">
+    <div class="rest-dock">
+      <div class="rest-dock-header">
+        <div class="rest-dock-timer">
+          <span class="time" id="restTimerDisplay">01:15</span>
+          <div class="info">
+            <span class="target">下一组 · <span id="dockTargetWeight">22.5</span> kg × 10 次</span>
+            <span class="sub">第 3 组 (正式) · 倒计时结束强振动</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rest-dock-progress"><i></i></div>
+
+      <div class="rest-dock-controls">
+        <button class="dock-adj-btn" onclick="adjustRestSeconds(-15)">−15s</button>
+        <button class="dock-adj-btn" onclick="adjustRestSeconds(15)">+15s</button>
+        <button class="dock-start-btn" onclick="skipRestNow()">立即开练 / 跳过 ›</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+
+<script>
+  var curWeight = 22.5;
+  var inputBuffer = "22.5";
+  var isTyping = false;
+  var restSeconds = 75;
+
+  function updateWeightUI() {
+    var valEl = document.getElementById('mainWeightDisplay');
+    if (valEl) valEl.innerHTML = curWeight + '<span class="sub">/ 只</span>';
+    var handsEl = document.getElementById('bothHandsDisplay');
+    if (handsEl) handsEl.innerHTML = '双手合计 <b>' + (curWeight * 2) + ' kg</b> · 上次同动作 22.5 / 只';
+    var dockTarget = document.getElementById('dockTargetWeight');
+    if (dockTarget) dockTarget.innerText = curWeight;
+  }
+
+  function stepWeight(delta) {
+    curWeight = Math.max(0, Math.round((curWeight + delta) * 10) / 10);
+    inputBuffer = String(curWeight);
+    updateWeightUI();
+  }
+
+  function openNumpad() {
+    document.getElementById('numpadDrawer').style.display = 'block';
+    inputBuffer = String(curWeight);
+    isTyping = false;
+  }
+
+  function closeNumpad() {
+    var parsed = parseFloat(inputBuffer);
+    if (!isNaN(parsed)) curWeight = parsed;
+    updateWeightUI();
+    document.getElementById('numpadDrawer').style.display = 'none';
+  }
+
+  function appendNum(ch) {
+    if (!isTyping) {
+      inputBuffer = (ch === '.' ? '0.' : ch);
+      isTyping = true;
+    } else {
+      if (ch === '.' && inputBuffer.indexOf('.') !== -1) return;
+      inputBuffer += ch;
+    }
+    var parsed = parseFloat(inputBuffer);
+    if (!isNaN(parsed)) {
+      curWeight = parsed;
+      updateWeightUI();
+    }
+  }
+
+  function backspaceNum() {
+    if (inputBuffer.length > 1) {
+      inputBuffer = inputBuffer.slice(0, -1);
+    } else {
+      inputBuffer = '0';
+      isTyping = false;
+    }
+    var parsed = parseFloat(inputBuffer);
+    if (!isNaN(parsed)) {
+      curWeight = parsed;
+      updateWeightUI();
+    }
+  }
+
+  function quickAddWeight(delta) {
+    curWeight = Math.max(0, Math.round((curWeight + delta) * 10) / 10);
+    inputBuffer = String(curWeight);
+    updateWeightUI();
+  }
+
+  function setExactWeight(val) {
+    curWeight = val;
+    inputBuffer = String(val);
+    updateWeightUI();
+  }
+
+  function adjustRestSeconds(delta) {
+    restSeconds = Math.max(0, restSeconds + delta);
+    var mins = Math.floor(restSeconds / 60);
+    var secs = restSeconds % 60;
+    var str = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+    var timerEl = document.getElementById('restTimerDisplay');
+    if (timerEl) timerEl.innerText = str;
+  }
+
+  function skipRestNow() {
+    alert('⚡ 休息结束，立即开练第 3 组！\n已记录当前组间休息时长，准备开始 22.5kg 做组。');
+    var timerEl = document.getElementById('restTimerDisplay');
+    if (timerEl) timerEl.innerText = '00:00';
+  }
+
+  function handleExitRecord() {
+    if (confirm('确认退出当前记录？\n\n已为您自动保存草稿至本机，返回首页后可随时一键恢复。')) {
+      window.location.href = 'home-v2.html';
+    }
+  }
+
+  function togglePainFree() {
+    var d = document.getElementById('painFreeDrawer');
+    d.style.display = (d.style.display === 'none' ? 'block' : 'none');
+  }
+  function toggleSwapAction() {
+    var d = document.getElementById('actionSwapSheet');
+    d.style.display = (d.style.display === 'none' ? 'block' : 'none');
+  }
+  function togglePlateLoader() {
+    var d = document.getElementById('plateVisualLoader');
+    d.style.display = (d.style.display === 'none' ? 'block' : 'none');
+  }
+  function toggleWarmupLadder() {
+    var d = document.getElementById('warmupLadderBox');
+    d.style.display = (d.style.display === 'none' ? 'block' : 'none');
+  }
+</script>
+</body>
+</html>

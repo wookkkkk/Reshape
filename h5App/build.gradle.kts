@@ -49,45 +49,38 @@ fun copyLocalJSBundle() {
         "distributions", "page"
     ).toFile()
     if (!destDir.exists()) {
-        // Create directory if it doesn't exist
         destDir.mkdirs()
-    } else {
-        // Remove original files if directory exists
-        destDir.deleteRecursively()
     }
 
-    // Input target path, in shared/outputs/kuikly/js/release/local/nativevue2.zip
-    val sourceDir = Paths.get(project.buildDir.absolutePath, "distributions", "kotlin2js").toFile()
-
-    // File to be decompressed
-    val zipFile = Paths.get(
+    // Direct modern webpack output path from shared module
+    val distJsFile = Paths.get(
         project.rootDir.absolutePath,
         businessPathName,
-        "build", "outputs", "kuikly", "js", "release", "local", "nativevue2.zip"
+        "build", "dist", "js", "productionExecutable", "nativevue2.js"
     ).toFile()
-    // Compressed file directory
-    val zipDir = Paths.get(project.buildDir.absolutePath, "distributions/kotlin2js").toFile()
-    if (!zipDir.exists()) {
-        zipDir.mkdirs()
-    } else {
-        zipDir.deleteRecursively()
-    }
-    // Decompress
-    project.copy {
-        from(zipTree(zipFile))
-        into(zipDir)
-    }
-    // Copy files
-    project.copy {
-        // Copy js files from business build result
-        from(sourceDir) {
-            include("nativevue2.js")
-        }
-        into(destDir)
-    }
-    // Remove redundant decompressed directory kotlin2js
-    delete(sourceDir)
 
+    val webpackJsFile = Paths.get(
+        project.rootDir.absolutePath,
+        businessPathName,
+        "build", "kotlin-webpack", "js", "productionExecutable", "nativevue2.js"
+    ).toFile()
+
+    val sourceFile = if (webpackJsFile.exists() && distJsFile.exists()) {
+        if (webpackJsFile.lastModified() >= distJsFile.lastModified()) webpackJsFile else distJsFile
+    } else if (webpackJsFile.exists()) {
+        webpackJsFile
+    } else if (distJsFile.exists()) {
+        distJsFile
+    } else null
+
+    if (sourceFile != null) {
+        project.copy {
+            from(sourceFile.parentFile) {
+                include("nativevue2.js")
+            }
+            into(destDir)
+        }
+    }
 }
 
 /**
@@ -257,6 +250,30 @@ fun copyAssetsFileToWebpackDevServer() {
     }
 }
 
+/**
+ * Copy compiled h5App.js to build/distributions directory
+ */
+fun copyH5AppJs() {
+    val destDir = Paths.get(project.buildDir.absolutePath, "distributions").toFile()
+    val distJsFile = Paths.get(project.buildDir.absolutePath, "dist", "js", "productionExecutable", "h5App.js").toFile()
+    val webpackJsFile = Paths.get(project.buildDir.absolutePath, "kotlin-webpack", "js", "productionExecutable", "h5App.js").toFile()
+    if (distJsFile.exists()) {
+        project.copy {
+            from(distJsFile.parentFile) {
+                include("h5App.js", "h5App.js.map")
+            }
+            into(destDir)
+        }
+    } else if (webpackJsFile.exists()) {
+        project.copy {
+            from(webpackJsFile.parentFile) {
+                include("h5App.js", "h5App.js.map")
+            }
+            into(destDir)
+        }
+    }
+}
+
 project.afterEvaluate {
     // At this point, project configuration is complete,
     // register build h5 page release version related build methods here
@@ -265,15 +282,12 @@ project.afterEvaluate {
     tasks.register("publishLocalJSBundle") {
         group = "kuikly"
 
-        // First execute h5App build task
-        dependsOn("jsBrowserDistribution")
-        // Then copy corresponding nativevue2.zip from business build result and copy nativevue2.js
-        // to h5App's release directory
-        copyLocalJSBundle()
-        // Copy assets resources
-        copyAssetsResource()
+        // First execute h5App build task and shared module webpack
+        dependsOn(":shared:jsBrowserProductionWebpack", "jsBrowserDistribution")
         doLast {
-            // Finally modify html file page.js reference
+            copyH5AppJs()
+            copyLocalJSBundle()
+            copyAssetsResource()
             generateLocalHtml()
         }
     }
@@ -284,12 +298,10 @@ project.afterEvaluate {
 
         // First execute h5App build task
         dependsOn("jsBrowserDistribution")
-        // Then copy corresponding page js from business build result to h5App's release directory
-        copySplitJSBundle()
-        // Copy assets resources
-        copyAssetsResource()
         doLast {
-            // Finally modify html file page.js reference
+            copyH5AppJs()
+            copySplitJSBundle()
+            copyAssetsResource()
             generateSplitHtml()
         }
     }

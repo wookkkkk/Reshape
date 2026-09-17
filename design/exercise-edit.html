@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>动作配置 · ExerciseEditPage</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+<style>
+  /* 模式切换示意条 */
+  .mode-switch {
+    display: flex;
+    background: #e3e5ef;
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 12px;
+  }
+  .mode-switch .tab {
+    flex: 1;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: 7px;
+    cursor: pointer;
+  }
+  .mode-switch .tab.on {
+    background: #fff;
+    color: var(--primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+</style>
+</head>
+<!--
+  统一动作配置页（合并 exercise-edit.html 与 custom-exercise.html）：
+  支持配置：
+  1. 基础信息：动作名称、目标部位、负重形式、起始重量与杠铃片算盘
+  2. 训练规格：计划组数、目标次数区间、目标 RPE
+  3. 递进逻辑：线性/半线性/固定重量策略 + 进阶推进口诀与说明
+  4. 执行要点与器械备忘：技术发力要领、安全代偿提示、座椅/卡扣孔位
+  5. 智能重量推算依据：关联三大项 1RM 与折算系数
+  6. 生效范围：仅本次有效 vs 永久写入计划
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">▮▮▮ ⌁ ▰</span>
+  </div>
+  <div class="capsule">··· <span class="sep"></span> ⊙</div>
+
+  <div class="screen">
+    <div style="padding-top:90px">
+      <div class="row" style="padding:10px 100px 8px 16px">
+        <a href="plan-edit.html" style="font-size:19px;color:var(--text-secondary);cursor:pointer;text-decoration:none">✕</a>
+        <div style="width:14px"></div>
+        <span class="t15 sec grow">动作配置</span>
+        <a class="t15 pri bold" href="plan-edit.html" style="text-decoration:none">完成</a>
+      </div>
+    </div>
+
+    <!-- 场景模式提示/切换 -->
+    <div class="px16">
+      <div class="mode-switch">
+        <div class="tab on">计划编排态</div>
+        <div class="tab">练中添加态（含生效范围）</div>
+      </div>
+    </div>
+
+    <!-- 1. 动作名称与部位 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="field-label">动作名称</div>
+        <div class="sp8"></div>
+        <input class="text-input" type="text" value="杠铃卧推" placeholder="输入动作名称">
+        <div class="sp8"></div>
+        <div class="row">
+          <span class="t13 sec grow">训练部位</span>
+          <a class="t13 pri" style="text-decoration:none">从预设动作库检索 ›</a>
+        </div>
+        <div class="sp8"></div>
+        <div class="chip-wrap" style="margin-top:0">
+          <div class="chip on">胸肩</div>
+          <div class="chip">背部</div>
+          <div class="chip">臀腿</div>
+          <div class="chip">手臂</div>
+          <div class="chip">核心</div>
+          <div class="chip">全身</div>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 2. 负重形式与目标重量 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="field-label">负重形式与单位</div>
+        <div class="sp8"></div>
+        <div class="row gap8" style="flex-wrap:wrap">
+          <div class="chip on" style="flex:1 1 40%">杠铃 (总负荷)</div>
+          <div class="chip" style="flex:1 1 40%">哑铃 (单手)</div>
+          <div class="chip" style="flex:1 1 28%">固定插销</div>
+          <div class="chip" style="flex:1 1 28%">自重</div>
+          <div class="chip" style="flex:1 1 35%">自重 + 负重</div>
+        </div>
+
+        <div class="sp14"></div>
+        <div class="divider"></div>
+        <div class="sp14"></div>
+
+        <div class="row">
+          <span class="field-label grow">目标起始重量</span>
+          <span class="unit-tag">杠铃合计 kg</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="stepper-row">
+          <button class="step-btn">−</button>
+          <span class="big-value">47.5<span class="sub">kg</span></span>
+          <button class="step-btn">+</button>
+        </div>
+        <!-- 杠铃片算盘 -->
+        <div class="plate-calc">
+          <span>20kg 标准杆 + 单边挂片：</span>
+          <span class="plate-chip">10kg</span>
+          <span class="plate-chip">2.5kg</span>
+          <span class="plate-chip">1.25kg</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 3. 计划组数、次数与目标 RPE -->
+    <div class="px16">
+      <div class="s-card">
+        <!-- 组数 -->
+        <div class="row">
+          <div class="col grow">
+            <span class="field-label">计划正式组数</span>
+            <div class="sp3"></div>
+            <span class="t13 sec">训练时可自动生成热身阶梯</span>
+          </div>
+          <div class="stepper-compact">
+            <button class="step-btn-s">−</button>
+            <span class="val">4 组</span>
+            <button class="step-btn-s">+</button>
+          </div>
+        </div>
+
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="sp12"></div>
+
+        <!-- 每组次数 -->
+        <div class="field-label">目标次数区间</div>
+        <div class="sp8"></div>
+        <input class="text-input" type="text" value="15/12/10/8" placeholder="例如 8–10 或 15/12/10/8">
+        <div class="sp6"></div>
+        <div class="t13 sec">波浪推进或区间上限，达标且 RPE ≤ 8 时触发加重</div>
+
+        <!-- 逐组波浪负荷计算预览 -->
+        <div style="background:var(--input-bg);border-radius:8px;padding:8px 10px;margin-top:8px">
+          <div class="row">
+            <span class="t12 bold" style="color:var(--primary)">🌊 逐组波浪负荷自动推算 (RPE 8)</span>
+            <span class="t12 faint">基于 1RM 70kg</span>
+          </div>
+          <div class="sp4"></div>
+          <div class="row gap6" style="font-size:11px;color:var(--text-secondary);flex-wrap:wrap">
+            <span>1组: 15次/45kg</span> <span>›</span>
+            <span>2组: 12次/50kg</span> <span>›</span>
+            <span>3组: 10次/52.5kg</span> <span>›</span>
+            <span class="pri bold">4组: 8次/57.5kg</span>
+          </div>
+        </div>
+
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="sp12"></div>
+
+        <!-- 目标 RPE -->
+        <div class="row">
+          <span class="field-label grow">目标强度 (RPE)</span>
+          <a class="t13 pri" href="principles.html" style="text-decoration:none">RPE 8 说明 ›</a>
+        </div>
+        <div class="sp8"></div>
+        <div class="rpe-pick">
+          <div class="lv"><div class="n">6</div><div class="w">剩 4</div></div>
+          <div class="lv"><div class="n">7</div><div class="w">剩 3</div></div>
+          <div class="lv on"><div class="n">8</div><div class="w">剩 2</div></div>
+          <div class="lv"><div class="n">9</div><div class="w">剩 1</div></div>
+          <div class="lv max"><div class="n">10</div><div class="w">力竭</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 4. 📈 递进逻辑与超负荷策略 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="field-label grow">📈 周期递进策略</span>
+          <span class="badge round soft">超负荷核心</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="prog-type-row on">
+          <div class="col grow">
+            <span class="t15 semi">线性递进（主项推进）</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">每次训练 +2.5 kg，容量先升后降，强度稳步上升</span>
+          </div>
+          <div class="radio on"></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="prog-type-row">
+          <div class="col grow">
+            <span class="t15 semi">半线性（表现达标加重）</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">次数与 RPE 均达标再加重量，适合大重量辅助项</span>
+          </div>
+          <div class="radio"></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="prog-type-row">
+          <div class="col grow">
+            <span class="t15 semi">固定重量（容量刺激）</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">重量恒定追求离心控制与泵感，适合单关节动作</span>
+          </div>
+          <div class="radio"></div>
+        </div>
+
+        <div class="sp14"></div>
+        <div class="divider"></div>
+        <div class="sp14"></div>
+
+        <div class="field-label">递进逻辑说明 / 周期节奏</div>
+        <div class="sp8"></div>
+        <input class="text-input" type="text" value="线性递进，波浪式推进：前期 15/12/10/8 熟悉期，随后转为 4×8，进阶降至 4×6 冲大重量" placeholder="输入递进推进说明">
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 5. 💡 执行要点、技术口诀与孔位备忘 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="field-label">💡 执行要点与技术口诀</div>
+        <div class="sp8"></div>
+        <input class="text-input" type="text" value="起桥沉肩夹背，小指对准滚花环。杠铃触胸不停留但绝不借力弹起，保持 RPE 8。" placeholder="例如：手肘夹紧45°，下放3秒离心控制">
+        <div class="sp6"></div>
+        <div class="t12 faint">将在训练时常驻提示，防止大重量动作代偿变形</div>
+
+        <div class="sp14"></div>
+        <div class="divider"></div>
+        <div class="sp14"></div>
+
+        <div class="field-label">📌 器械孔位 / 场地档位备忘</div>
+        <div class="sp8"></div>
+        <input class="text-input" type="text" value="卧推平凳标准高度，安全销卡在胸口上方 2cm" placeholder="例如：座椅4孔，滑轮卡扣7档">
+
+        <div class="sp14"></div>
+        <div class="divider"></div>
+        <div class="sp14"></div>
+
+        <div class="field-label">默认组间休息时长</div>
+        <div class="sp8"></div>
+        <div class="row gap8" style="flex-wrap:wrap">
+          <div class="chip">45 秒</div>
+          <div class="chip">60 秒</div>
+          <div class="chip">90 秒</div>
+          <div class="chip on">120 秒</div>
+          <div class="chip">180 秒</div>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 6. 🧮 重量推算依据与关联主项 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="field-label grow">🧮 智能重量推算依据</span>
+          <span class="badge round soft">算法绑定</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="row">
+          <span class="t13 sec grow">关联三大项主项基准</span>
+          <span class="t13 pri bold">卧推 1RM (70 kg) ›</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="row">
+          <span class="t13 sec grow">动作折算系数</span>
+          <span class="t13 semi">65% (主项基准)</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="t12 faint">💡 关联主项后修改 1RM 会自动更新建议重量；若设为「无关联」，则按固定重量或上次记录推进。</div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 7. 生效范围 -->
+    <div class="px16">
+      <div class="s-card p0">
+        <div class="field" style="padding-bottom:0">
+          <div class="field-label">保存生效范围</div>
+        </div>
+        <div class="pick-row">
+          <div class="radio"></div>
+          <div class="col grow">
+            <span class="pick-name">仅加入本次训练</span>
+            <span class="pick-desc">今天临时加练或借用器械，练完不改动原计划。</span>
+          </div>
+        </div>
+        <div class="divider" style="margin-left:48px"></div>
+        <div class="pick-row">
+          <div class="radio on"></div>
+          <div class="col grow">
+            <span class="pick-name">永久写入「凯谭三分化」推日</span>
+            <span class="pick-desc">以后每个推日均自动排入本动作，带入默认值。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:110px"></div>
+  </div>
+
+  <!-- 吸底操作区 -->
+  <div class="sticky-bar">
+    <div class="divider"></div>
+    <div class="inner">
+      <a class="cta" href="plan-edit.html" style="text-decoration:none">保存动作配置</a>
+      <div class="sp10"></div>
+      <a class="cta-outline" href="plan-edit.html" style="display:block;text-align:center;text-decoration:none;padding:10px 0;font-size:14px;border-radius:18px">从计划中删除动作</a>
+    </div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>训练原则 · PrinciplesPage</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<body class="screen-page">
+<!--
+  对应 KaishengwangXTanchengyi 的 PrinciplesPage，内容取自 trainingPlan.ts 的 principles[]。
+  上游是四条并列的原则文档，这里排成「先答疑、后展开」：
+  RPE 8 放第一位，因为它是整套计划唯一的强度单位 —— 记录页每一组都要填它，
+  用户在记录页第一次遇到 RPE 时点进来，最想看到的就是这一条。
+  三分化 / 五分化对比放最后，它解释的是「为什么只练三天」，属于读完前面才会关心的问题。
+-->
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <div class="screen">
+    <!-- 顶栏跟其他二级页同构：状态栏 44 + 胶囊 46，右侧留 100 -->
+    <div style="padding-top:90px">
+      <div class="row" style="padding:10px 100px 8px 16px">
+        <a href="knowledge.html" style="font-size:19px;color:var(--text-secondary);cursor:pointer;text-decoration:none">‹</a>
+        <div style="width:14px"></div>
+        <span class="t15 sec">训练原则</span>
+      </div>
+      <div class="sp8"></div>
+    </div>
+
+    <div class="px16">
+      <div class="t13 semi pri">练之前先读一遍</div>
+      <div class="sp6"></div>
+      <div class="form-title">五条原则</div>
+      <div class="sp6"></div>
+      <div class="t13 sec">这套计划的重量、次数、休息都是从这五条推出来的。记不住也没关系，训练里随时能点回来。</div>
+      <div class="sp16"></div>
+    </div>
+
+    <!-- 原则一：RPE 8。放最前面，它是记录页每组都要填的那个数 -->
+    <div class="px16" id="rpe">
+      <div class="s-card">
+        <div class="row">
+          <span class="badge round soft">01</span>
+          <div style="width:10px"></div>
+          <span class="principle-title grow">RPE 8 是什么感觉</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="t14 sec" style="line-height:1.7">
+          做完规定的次数之后，感觉自己还能再做 2 个 —— 那就是 RPE 8。
+          不是"练到动不了"，也不是"轻轻松松"。
+        </div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+
+        <!-- 量表。只列计划里真正用到的三档，10 之外的不展开 -->
+        <div class="rpe-scale">
+          <span class="lv">8</span>
+          <span class="t13 sec grow">还能再做 2 个。计划里绝大多数组都是这一档。</span>
+        </div>
+        <div class="divider"></div>
+        <div class="rpe-scale">
+          <span class="lv">9–9.5</span>
+          <span class="t13 sec grow">还能再做 1 个，或者勉强 1 个。只留给每个动作的最后一组。</span>
+        </div>
+        <div class="divider"></div>
+        <div class="rpe-scale">
+          <span class="lv">10</span>
+          <span class="t13 sec grow">真正做不动了。只在单关节、小重量的动作上用。</span>
+        </div>
+
+        <div class="sp12"></div>
+        <div class="t13 faint" style="line-height:1.6">
+          填 RPE 不是打分，它决定下次给你的建议重量往上走还是原地停。
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 原则二：什么时候练到力竭 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="badge round soft">02</span>
+          <div style="width:10px"></div>
+          <span class="principle-title grow">什么时候可以练到力竭</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="t14 sec" style="line-height:1.7">
+          判断标准只有一条：做不动的那一下，会不会受伤。
+        </div>
+        <div class="sp12"></div>
+        <div class="keypoint">大重量复合动作（深蹲、硬拉、卧推）留 2 个，不练到力竭 —— 姿势散掉的代价太大。</div>
+        <div class="keypoint">单关节、小肌群、小重量的动作可以到力竭，比如侧平举、弯举、臂屈伸。</div>
+        <div class="keypoint">器械和钢线比自由重量安全，力竭的空间更大。</div>
+        <div class="keypoint">拿不准就按 RPE 8 走。少练一组不会掉肌肉，伤一次要停一个月。</div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 原则三：渐进超负荷 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="badge round soft">03</span>
+          <div style="width:10px"></div>
+          <span class="principle-title grow">渐进超负荷的三种形式</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="t14 sec" style="line-height:1.7">
+          一次训练只改一个变量。这一次加重量，就别同时加次数、加组数。
+        </div>
+        <div class="sp12"></div>
+        <div class="keypoint"><span class="semi" style="color:var(--text-primary)">主项线性递进</span>：深蹲、硬拉、卧推及其变式，按 RPE 8 每次 +2.5kg，一个周期 8 次。</div>
+        <div class="keypoint"><span class="semi" style="color:var(--text-primary)">辅助动作半递进</span>：动作做标准了再加重量，做不标准就把重量退回去。</div>
+        <div class="keypoint"><span class="semi" style="color:var(--text-primary)">固定重量</span>：单关节、小肌群动作重量不动，靠做到位取效果。</div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="sp12"></div>
+        <div class="row">
+          <div class="col grow">
+            <span class="t14 semi">看这个周期的完整递进</span>
+            <div class="sp3"></div>
+            <span class="t13 sec">8 次训练，每次的建议重量</span>
+          </div>
+          <a class="inline-edit" href="progression-v2.html" style="text-decoration:none">打开</a>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 原则四：为什么三分化 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="badge round soft">04</span>
+          <div style="width:10px"></div>
+          <span class="principle-title grow">为什么是三天，不是五天</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="row top gap12">
+          <div class="cmp-col ours">
+            <div class="head">三分化</div>
+            <div class="li">推 / 拉 / 腿，每个部位每周练到 2 次</div>
+            <div class="li">一次 5 个动作，60 分钟左右</div>
+            <div class="li">缺一天补得回来，节奏不容易断</div>
+          </div>
+          <div class="cmp-col other">
+            <div class="head">五分化</div>
+            <div class="li">按部位细分，每个部位每周 1 次</div>
+            <div class="li">单个部位练得更透</div>
+            <div class="li">缺一天就等一周，对时间要求高</div>
+          </div>
+        </div>
+        <div class="sp12"></div>
+        <div class="t13 faint" style="line-height:1.6">
+          练到一定水平之后再考虑细分。在那之前，每周两次刺激比一次练透更有用。
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 原则五：肌群超量恢复与中枢神经疲劳科学 -->
+    <div class="px16" id="recovery">
+      <div class="s-card">
+        <div class="row">
+          <span class="badge round soft">05</span>
+          <div style="width:10px"></div>
+          <span class="principle-title grow">肌群超量恢复与中枢神经 (CNS) 疲劳</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="t14 sec" style="line-height:1.7">
+          肌肉不是在训练中生长的，而是在训练后的<b>超量恢复黄金窗口（48~72小时）</b>中修复增大的。
+        </div>
+        <div class="sp10"></div>
+        <div class="keypoint"><span class="semi" style="color:var(--text-primary)">小肌群 (24~48h)</span>：三角肌中后束、二头肌、三头肌恢复较快，可承受较高频率。</div>
+        <div class="keypoint"><span class="semi" style="color:var(--text-primary)">大肌群与后侧链 (48~72h)</span>：深蹲、硬拉对股四头肌与竖脊肌损伤深，至少需间隔 48~72 小时。</div>
+        <div class="keypoint"><span class="semi" style="color:var(--text-primary)">中枢神经 CNS 疲劳</span>：大重量复合动作消耗神经系统。若出现握力下降、心率偏高、失眠，需主动插入休息日或开启 1 周减载。</div>
+      </div>
+    </div>
+
+    <!-- 给吸底 CTA 让位，同其他二级页 -->
+    <div style="height:96px"></div>
+  </div>
+
+  <div class="sticky-bar">
+    <div class="divider"></div>
+    <div class="inner"><a class="cta" href="home-v2.html" style="text-decoration:none">知道了，去训练 ›</a></div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+</body>
+</html>

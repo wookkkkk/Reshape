@@ -1,0 +1,2675 @@
+/*
+ * 页面级样式 —— 只放单屏专用的东西，通用组件在 tokens.css
+ *
+ * 同样按 Kotlin 侧的 dp / sp 1:1 映射成 px，改之前先对一遍对应的 Composable。
+ */
+
+/* ---------- 间距 ---------- */
+
+/* 对应 Kotlin 里的 Spacer(Modifier.height(n.dp))，数字保持一致方便对照 */
+.sp3  { height: 3px; }
+.sp4  { height: 4px; }
+.sp6  { height: 6px; }
+.sp8  { height: 8px; }
+.sp10 { height: 10px; }
+.sp12 { height: 12px; }
+.sp14 { height: 14px; }
+.sp16 { height: 16px; }
+.sp18 { height: 18px; }
+.sp24 { height: 24px; }
+
+/* ---------- 单屏页面（被 index.html 用 iframe 嵌入） ---------- */
+
+/* iframe 宽度正好 390，居中等于不偏移；单独打开时也不会贴边 */
+body.screen-page {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #dfe2ee;
+}
+
+/* ---------- 首页 SessionHomePage ---------- */
+
+/* Pill —— 顶栏「分享 / 我」 */
+.pill {
+  background: var(--card);
+  border-radius: 15px;
+  padding: 7px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* TodayCard 里的部位大标题，38sp 是整屏最大字号 */
+.today-focus {
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+/* 「更换」按钮 */
+.swap-btn {
+  background: var(--primary-soft);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 14px;
+  color: var(--primary);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* 本周进度条 —— 比 ThinProgress 粗，且带渐变 */
+.week-track {
+  height: 9px;
+  border-radius: 5px;
+  background: var(--primary-soft);
+  overflow: hidden;
+}
+.week-track > i {
+  display: block;
+  height: 9px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--primary), #8a6fe0);
+}
+
+/* MiniCard —— 拉伸 / 历史 两张并排小卡 */
+.mini {
+  flex: 1;
+  min-width: 0;
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+}
+.mini .tag {
+  display: inline-block;
+  background: var(--primary-soft);
+  border-radius: 7px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--primary);
+}
+.mini .title {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.mini .sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.mini .action {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--primary);
+}
+
+/* 底部 Tab 栏，高度对应 TAB_BAR_HEIGHT = 74 */
+.tab-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  background: var(--card);
+}
+.tab-bar .tabs {
+  display: flex;
+  padding: 12px 0;
+}
+.tab {
+  flex: 1;
+  padding: 6px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+.tab.on {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* 未完成的 Tab 占位页 */
+.placeholder-title {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* ---------- 记录页 SessionRecordPage ---------- */
+
+.record-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* 演示图占位。高 200 对应 DemoCard 里的 height(200.dp) */
+.demo-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  border-radius: 12px;
+  background: var(--primary-tint);
+  font-size: 13px;
+  color: var(--text-faint);
+  overflow: hidden;
+}
+.demo-credit {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+/* RPE 数值格，固定 56 宽避免左右按钮跳动 */
+.rpe-value {
+  width: 56px;
+  text-align: center;
+  font-weight: 700;
+}
+.rpe-value.set {
+  font-size: 26px;
+  color: var(--primary-deep);
+}
+.rpe-value.empty {
+  font-size: 20px;
+  color: var(--text-faint);
+}
+
+/* 「沿用上一组数据」整行高亮，只在有上一组记录时出现 */
+.reuse-row {
+  padding: 15px 0;
+  background: var(--primary-tint);
+  text-align: center;
+  font-size: 15px;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+/* 休息计时的大号数字 */
+.rest-time {
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--primary-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 临时加组 / 删组 —— 白底无描边，跟下面的描边按钮区分层级 */
+.set-action {
+  flex: 1;
+  padding: 13px 0;
+  border-radius: 12px;
+  background: var(--card);
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.set-action.off {
+  color: var(--text-faint);
+  cursor: default;
+}
+
+/* ---------- 全部动作抽屉 AllExercisesSheet ---------- */
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 35;
+  background: rgba(16, 18, 35, 0.4);
+}
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 36;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+}
+.sheet-handle {
+  width: 44px;
+  height: 5px;
+  margin: 10px auto 0;
+  border-radius: 3px;
+  background: #dcdde8;
+}
+.sheet-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+.sheet-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 16px;
+}
+.sheet-list::-webkit-scrollbar {
+  width: 0;
+}
+
+/* 动作行。训练中的那一条用主色底突出 */
+.ex-row {
+  border-radius: 14px;
+  background: #f6f7fb;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.ex-row.current {
+  background: var(--primary-soft);
+}
+.ex-index {
+  font-size: 13px;
+  color: var(--text-faint);
+}
+.ex-name {
+  flex: 1;
+  min-width: 0;
+  margin-left: 10px;
+  font-size: 17px;
+  font-weight: 700;
+}
+.ex-name.off {
+  color: var(--text-faint);
+}
+.badge.round.green {
+  color: var(--green);
+}
+.badge.round.sec {
+  color: var(--text-secondary);
+}
+
+/* 组号方块 54x54，实心底表示已记录 */
+.set-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  background: #edeef4;
+  font-size: 18px;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+.set-chip.logged {
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 600;
+}
+.set-chip.current {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+/*
+ * 抽屉末尾的「新建自定义动作」。虚线边框跟上面的实底动作行区分：
+ * 它是一个入口，不是列表里的一条动作。
+ */
+.add-ex-row {
+  padding: 16px 0;
+  border: 1px dashed #c9cbdd;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+/* ---------- 完成页 SessionSummaryPage ---------- */
+
+.stat-cell {
+  flex: 1;
+}
+.stat-value {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--primary-deep);
+  line-height: 1;
+}
+.stat-unit {
+  margin-left: 6px;
+  padding-bottom: 5px;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+/* 单组记录行 */
+.log-row {
+  display: flex;
+  align-items: center;
+  padding: 9px 0;
+}
+.log-row .no {
+  width: 64px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.log-row .val {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 已记录动作的徽标：主色底 + 主色字 */
+.badge.round.soft {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+/* 未记录动作的徽标，跟已记录的主色底区分 */
+.badge.round.blank {
+  background: #f1f2f7;
+  color: var(--text-secondary);
+}
+
+/* ---------- 自定义动作 CustomExercisePage（尚无 Kotlin 实现） ---------- */
+
+/* 表单页标题，比记录页的 30 略小，因为下面全是密集的表单行 */
+.form-title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* 卡片内的一个字段区块，自带 16 内边距（卡片用 .s-card.p0） */
+.field {
+  padding: 16px;
+}
+
+.field-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/*
+ * 文本输入框。Kuikly 没有 OutlinedTextField，所以这里就是
+ * TextField + 自定义 shape / colors 的样子：浅底 + 1px 描边。
+ */
+.input {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 13px 14px;
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  background: var(--primary-tint);
+  color: var(--text-primary);
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.input::placeholder {
+  color: var(--text-faint);
+}
+
+/* 字数统计，对应 Modifier.maxLength + onLimitChange */
+.input-counter {
+  margin-top: 8px;
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+/* 部位选择：chip 换行排列，所以取消 .chip 的 flex:1 */
+.chip-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.chip-wrap .chip {
+  flex: 0 0 auto;
+  padding: 10px 16px;
+}
+
+/* 紧凑字段行的数值格。比 .rpe-value 宽，要放得下「90 秒」 */
+.field-value {
+  width: 76px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.field-value .unit {
+  margin-left: 3px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-faint);
+}
+
+/* 演示图上传位，虚线框表示「还没有东西」 */
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  border: 1px dashed #c9cbdd;
+  border-radius: 12px;
+  background: var(--primary-tint);
+  cursor: pointer;
+}
+
+.upload-box .plus {
+  font-size: 26px;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.upload-box .hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* 单选行 —— 生效范围 / 休息时长的应用范围都用它 */
+.pick-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.radio {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border: 1.5px solid #c9cbdd;
+  border-radius: 10px;
+}
+
+/* 选中态用厚边框做实心圆环，省掉一个内层元素 */
+.radio.on {
+  border: 6px solid var(--primary);
+}
+
+.pick-name {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.pick-desc {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ---------- 休息时长修改 ---------- */
+
+/*
+ * 记录页 RestCard 底部的入口。单独一行，
+ * 不挤进「暂停 / +30 秒 / 跳过」那一行。
+ */
+.rest-edit-entry {
+  padding-top: 12px;
+  font-size: 13px;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+/* 目标行后面的「改」，训练还没开始时也能调时长 */
+.inline-edit {
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: var(--primary-soft);
+  font-size: 12px;
+  color: var(--primary);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/*
+ * 时长抽屉内容是固定的几行，不需要滚动，
+ * 高度交给内容决定，免得写死数值后底部空一截。
+ */
+.sheet.auto {
+  height: auto;
+}
+
+.sheet-body {
+  padding: 0 16px 16px;
+}
+
+/* 抽屉里的时长主数值，比 RestCard 的 34 更大，它是这一屏的主角 */
+.rest-big {
+  font-size: 46px;
+  font-weight: 700;
+  color: var(--primary-deep);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.rest-big .unit {
+  margin-left: 4px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-faint);
+}
+
+/* 常用时长快选。5 个一行，所以宽度写死而不是 flex:1 */
+.rest-chip {
+  flex: 0 0 auto;
+  width: 62px;
+  padding: 11px 0;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: var(--text-primary);
+  font-size: 13px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.rest-chip.on {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ================================================================
+ * 重量推算（来自 KaishengwangXTanchengyi 的 weightCalculator.ts）
+ *
+ * 推算链路：三大项 1RM → 动作系数 → 目标次数对应的 RPE 8 百分比
+ *          → 取整到 2.5kg → 按本周期第几次训练线性递进
+ * 这一段的三屏（三大项设置 / 月度递进 / 训练原则）都还没有 Kotlin 实现。
+ * ================================================================ */
+
+/* ---------- 分段选择器 —— 「直接输入 / 用组重量估算」 ---------- */
+/*
+ * Kuikly 没有 SegmentedButton，实现时用 Row + 两个 Box 自己拼，
+ * 所以这里也按「外层浅底容器 + 选中项白底浮起」的结构画。
+ */
+.seg {
+  display: flex;
+  padding: 3px;
+  border-radius: 11px;
+  background: var(--primary-tint);
+}
+
+.seg-item {
+  flex: 1;
+  padding: 9px 0;
+  border-radius: 9px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.seg-item.on {
+  background: var(--card);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ---------- 三大项设置 OneRepMaxPage ---------- */
+
+/* 主项名。1RM 是整屏的主角，名字不用太大 */
+.lift-name {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* 已保存的 1RM 数值 */
+.lift-1rm {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.lift-1rm .unit {
+  margin-left: 3px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-faint);
+}
+
+/* 一对「重量 × 次数」的小输入框 */
+.mini-input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+  background: var(--primary-tint);
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 600;
+  font-family: inherit;
+  text-align: center;
+}
+
+/* 公式行。等宽字体，让它看着像公式而不是正文 */
+.formula {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--primary-tint);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* 估算结果行，跟公式区分开：这是结论 */
+.calc-out {
+  font-size: 13px;
+  color: var(--primary);
+}
+
+/* ---------- 建议重量（记录页 / 动作列表） ---------- */
+
+/*
+ * 步进器上方的建议值。用主色，跟灰色的「上次记录」区分 ——
+ * 一个是系统算的，一个是自己练的，不能混成一种颜色。
+ */
+.sug-hint {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--primary);
+}
+
+.sug-hint .last {
+  color: var(--text-faint);
+}
+
+/* 「用建议值」轻按钮，跟 .inline-edit 同一套视觉 */
+.apply-sug {
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: var(--primary-soft);
+  font-size: 12px;
+  color: var(--primary);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* 自重 / 未关联主项的动作，没有建议值可给 */
+.no-sug {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+/* 动作列表行里的建议重量小字 */
+.row-sug {
+  font-size: 12px;
+  color: var(--primary);
+}
+
+/* ---------- 首页的三个入口行 ---------- */
+
+/* 一整行可点，所以用 <a> 而不是文字上挂链接 */
+.entry-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ---------- 月度递进 ProgressionPage ---------- */
+
+/*
+ * 推算链路一行一步。等宽字体 + 运算符降饱和度，
+ * 让它读起来像算式，而不是一句带数字的话。
+ */
+.calc-chain {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.calc-chain em {
+  font-style: normal;
+  color: var(--text-faint);
+}
+
+/* 链路末端的结论值 */
+.calc-chain .hl {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-deep);
+}
+
+/* 一周一块，块内两行训练 */
+.wk {
+  padding: 12px 16px;
+}
+
+.wk-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 4px;
+}
+
+.wk-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/*
+ * 单次训练一行。横排而不是并列两格，是因为右边要放
+ * 「实际 65 × 12」这种回看信息，竖排格子放不下。
+ * 负 margin 让高亮底色往卡片边缘铺开，文字仍对齐 16。
+ */
+.prog-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 -10px;
+  padding: 9px 10px;
+  border-radius: 10px;
+}
+
+.prog-row .no {
+  flex: 0 0 auto;
+  width: 46px;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.prog-row .w {
+  flex: 0 0 auto;
+  width: 62px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 已完成：数值降一档，重点让给还没练的那几次 */
+.prog-row.done .w {
+  color: var(--text-secondary);
+}
+
+/* 当前这一次：浅主色底，扫一眼就知道自己在周期哪儿 */
+.prog-row.now {
+  background: var(--primary-soft);
+}
+
+.prog-row.now .w {
+  color: var(--primary-deep);
+}
+
+/* ---------- 训练原则 PrinciplesPage ---------- */
+
+.principle-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* 要点行前面的圆点，用 ::before 省一层元素 */
+.keypoint {
+  position: relative;
+  padding-left: 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.keypoint::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--primary);
+}
+
+/* RPE 说明的量表行 */
+.rpe-scale {
+  display: flex;
+  align-items: center;
+  padding: 9px 0;
+}
+
+.rpe-scale .lv {
+  flex: 0 0 auto;
+  width: 62px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary-deep);
+}
+
+/* 三分化 / 五分化对比的两栏 */
+.cmp-col {
+  flex: 1;
+  min-width: 0;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.cmp-col.ours {
+  background: var(--primary-soft);
+}
+
+.cmp-col.other {
+  background: #f6f7fb;
+}
+
+.cmp-col .head {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.cmp-col .li {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ================================================================
+ * 完整计划（15 个动作）
+ *
+ * 内容来自 TrainingPlan.kt 的 trainingPlan：3 个训练日 × 5 个动作，
+ * 名称 / 组数 / 次数 / RPE / 递进逻辑 / 执行要点 / 标签全部照搬。
+ * 建议重量由 WeightCalculator.kt 的 calcExerciseWeight 算出，
+ * 不是估的 —— 改数值前先跑一遍那套公式。
+ * ================================================================ */
+
+/* ---------- 计划总览 PlanPage ---------- */
+
+.plan-title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+/* 三大项一条横排，三个数并列 —— 它们是同一类东西，不该竖着堆 */
+.lift-strip {
+  display: flex;
+  align-items: center;
+}
+
+.lift-cell {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.lift-cell .v {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.lift-cell .k {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+/* 竖分隔线，比 .divider 更适合横排的三格 */
+.v-divider {
+  flex: 0 0 auto;
+  width: 1px;
+  height: 30px;
+  background: var(--divider);
+}
+
+/* 训练日卡片头部，整块可点进详情 */
+.day-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.day-head .icon {
+  font-size: 22px;
+}
+
+.day-head .name {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.day-head .focus {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ---------- 动作行（总览里的紧凑版） ---------- */
+
+.mv-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+}
+
+.mv-no {
+  flex: 0 0 auto;
+  width: 18px;
+  font-size: 12px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.mv-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mv-meta {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+/* 右侧建议重量。定宽，避免各行数字左右跳 */
+.mv-w {
+  flex: 0 0 auto;
+  width: 74px;
+  text-align: right;
+}
+
+.mv-w .n {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.mv-w .u {
+  margin-left: 2px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-faint);
+}
+
+/* ---------- 动作详情卡（训练日页） ---------- */
+
+/* 序号方块，对应 ExerciseCard.kt 里的 26dp Box */
+.ex-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--primary-soft);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* 「哑铃·单手」这类限定语，跟动作名同一行但要弱一档 */
+.hand {
+  flex: 0 0 auto;
+  font-size: 10px;
+  color: var(--primary);
+  opacity: 0.6;
+}
+
+/* 标签组 */
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tg {
+  border-radius: 7px;
+  background: var(--primary-tint);
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* 组数 / 强度 / 次数 三格 */
+.info-cell {
+  flex: 1;
+  min-width: 0;
+  border-radius: 10px;
+  background: var(--primary-tint);
+  padding: 9px 11px;
+}
+
+.info-cell .k {
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+.info-cell .v {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/*
+ * 建议重量徽标。三种递进类型给三种颜色，
+ * 对应 WeightDisplay.kt 里 LINEAR / SEMI / FIXED 的 accent 分支。
+ */
+.w-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.w-badge.linear {
+  background: rgba(62, 169, 122, 0.12);
+  color: var(--green);
+}
+
+.w-badge.semi {
+  background: rgba(221, 110, 60, 0.12);
+  color: var(--orange);
+}
+
+.w-badge.fixed {
+  background: rgba(91, 95, 199, 0.12);
+  color: var(--primary);
+}
+
+/* 徽标后面的补充说明 */
+.w-note {
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+/* 递进逻辑 / 执行要点。左侧色条比整框描边更省视觉噪音 */
+.detail {
+  border-radius: 10px;
+  background: var(--primary-tint);
+  border-left: 3px solid var(--primary-soft);
+  padding: 10px 12px;
+}
+
+.detail.tip {
+  border-left-color: rgba(221, 110, 60, 0.35);
+}
+
+.detail .k {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.detail.tip .k {
+  color: var(--orange);
+}
+
+.detail .v {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* 换日导航，放在动作列表末尾 */
+.day-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.day-nav a {
+  flex: 1;
+  min-width: 0;
+  border-radius: 12px;
+  background: var(--card);
+  padding: 12px 0;
+  text-align: center;
+  text-decoration: none;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/*
+ * 算法说明的黄色提示。用橙色而不是主色 ——
+ * 这几条是「实现时要注意的坑」，跟正常内容要能一眼分开。
+ */
+.warn {
+  border-radius: 10px;
+  background: rgba(221, 110, 60, 0.08);
+  border-left: 3px solid rgba(221, 110, 60, 0.4);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.warn b {
+  color: var(--orange);
+}
+
+/* ================================================================
+ * 优化版（v2）—— 从十年训练者的使用场景反推的改动
+ *
+ * 两条主线：
+ * 1. 记录页在健身房是「一只手 + 出汗 + 组间 60 秒」的场景，
+ *    所以本组三个数（重量/次数/RPE）必须一屏内完成，其余全部收起。
+ * 2. 建议重量不能只由 1RM×系数 算一次就线性 +2.5 到底，
+ *    要用上组实际 RPE 做自动调节 —— RPE 是这套计划的核心变量，
+ *    收上来却不参与计算是最大的逻辑浪费。
+ * ================================================================ */
+
+/* ---------- 顶部：组进度条 + 本次时长 ---------- */
+
+/* 本次训练已进行时长。放顶部而不是完成页，训练中才有意义 */
+.sess-clock {
+  font-size: 13px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * 当前动作的组进度条。横向一排组号，已记录的显示实际重量×次数，
+ * 点任意一组可回改 —— 原设计要退出到「本次全部动作」抽屉才能改。
+ */
+.set-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.set-strip .cell {
+  flex: 0 0 auto;
+  width: 62px;
+  border-radius: 10px;
+  background: #edeef4;
+  padding: 7px 0 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.set-strip .cell .n {
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.set-strip .cell .d {
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 已记录：主色浅底 + 实际数据 */
+.set-strip .cell.logged {
+  background: var(--primary-soft);
+}
+
+.set-strip .cell.logged .n,
+.set-strip .cell.logged .d {
+  color: var(--primary);
+}
+
+/* 当前组：实心，最高对比度 */
+.set-strip .cell.current {
+  background: var(--primary);
+}
+
+.set-strip .cell.current .n {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.set-strip .cell.current .d {
+  color: #fff;
+}
+
+/* 热身组：虚线框，跟工作组区分 —— 热身不计入容量和递进判定 */
+.set-strip .cell.warm {
+  background: transparent;
+  border: 1px dashed #c9cbdd;
+  padding: 6px 0 7px;
+}
+
+.set-strip .cell.warm .d {
+  color: var(--green);
+}
+
+/* ---------- 本组输入：一屏完成 ---------- */
+
+/* 动作名。比 .record-title 小一档，因为上面多了组进度条 */
+.ex-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/*
+ * 单位直接写进 label（「kg / 只」而不是提示行里的小字）。
+ * 单手 22.5 和双手 45 在健身房差 2 倍，这个单位不能靠 hint 传达。
+ */
+.unit-tag {
+  margin-left: 6px;
+  padding: 2px 7px;
+  border-radius: 7px;
+  background: rgba(221, 110, 60, 0.12);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--orange);
+}
+
+/* 杠铃动作的每边配重。省掉心算，也顺手暴露「凑不出来」的重量 */
+.plate {
+  border-radius: 9px;
+  background: var(--primary-tint);
+  padding: 8px 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.plate b {
+  color: var(--primary-deep);
+}
+
+/* 大号步进器：数值 34px，比原来的 26 更容易在低头时看清 */
+.big-value {
+  flex: 1;
+  text-align: center;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.big-value .sub {
+  margin-left: 3px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-faint);
+}
+
+/*
+ * RPE 快选。原设计用 ± 步进器，要点 4 次才能从 6 调到 10；
+ * RPE 只有 5 个有效值（6/7/8/9/10），平铺一次点中。
+ */
+.rpe-pick {
+  display: flex;
+  gap: 8px;
+}
+
+.rpe-pick .lv {
+  flex: 1;
+  border-radius: 11px;
+  background: #edeef4;
+  padding: 9px 0 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.rpe-pick .lv .n {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.rpe-pick .lv .w {
+  margin-top: 1px;
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+.rpe-pick .lv.on {
+  background: var(--primary);
+}
+
+.rpe-pick .lv.on .n {
+  color: #fff;
+}
+
+.rpe-pick .lv.on .w {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* RPE 10（力竭）用橙色警示：主项不该练到这里 */
+.rpe-pick .lv.max .n {
+  color: var(--orange);
+}
+
+/* ---------- 自动调节：用上组 RPE 推下一组重量 ---------- */
+
+/*
+ * 这块是 v2 的核心新增。原设计里 RPE 只是被记录下来的一个数字，
+ * 而计划本身是「RPE 8 = 还剩 2 个」的自回归结构 ——
+ * 上组 RPE 6 说明重量给低了，下组就该加；RPE 9/10 说明超了，该减。
+ * 所以建议值 = f(1RM 系数基准, 上次实际重量, 上次实际 RPE)。
+ */
+.auto-reg {
+  border-radius: 12px;
+  background: var(--primary-tint);
+  padding: 12px 14px;
+}
+
+.auto-reg .hd {
+  font-size: 12px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.auto-reg .bd {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.65;
+}
+
+.auto-reg .bd b {
+  color: var(--primary-deep);
+}
+
+/* 建议动作按钮：一键接受调节结果，不用自己按 ± */
+.auto-reg .act {
+  margin-top: 10px;
+  display: inline-block;
+  border-radius: 10px;
+  background: var(--primary);
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* 减重建议用橙色：它是保护性提示，不是进步 */
+.auto-reg.down {
+  background: rgba(221, 110, 60, 0.07);
+}
+
+.auto-reg.down .hd {
+  color: var(--orange);
+}
+
+.auto-reg.down .act {
+  background: var(--orange);
+}
+
+/* ---------- 可折叠区：训练中默认收起 ---------- */
+
+/*
+ * 演示图 / 替代动作 / 加组删组 / 递进表在组间 60 秒里都不看。
+ * 原设计把它们全部平铺，一屏塞不下、要滚动才能到 CTA。
+ * 收成一行标题 + 右侧箭头，需要时才展开。
+ */
+.fold {
+  display: flex;
+  align-items: center;
+  padding: 13px 16px;
+  cursor: pointer;
+}
+
+.fold .ttl {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.fold .hint {
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-right: 8px;
+}
+
+.fold .arw {
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+/* ---------- 组间休息：常驻悬浮休息仓 (Floating Rest Dock) ---------- */
+
+/*
+  休息仓常驻底部吸底，不随滚屏消失。
+  支持 ±15s 精准微调、平滑进度条、下一组预告与「立即开练 / 跳过」主操作。
+*/
+.rest-dock {
+  background: var(--card);
+  border-top: 1px solid var(--divider);
+  box-shadow: 0 -6px 24px rgba(30, 32, 51, 0.08);
+  padding: 12px 16px 20px;
+}
+
+.rest-dock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.rest-dock-timer {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.rest-dock-timer .time {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-deep);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.rest-dock-timer .info {
+  display: flex;
+  flex-direction: column;
+}
+
+.rest-dock-timer .info .target {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.rest-dock-timer .info .sub {
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-top: 1px;
+}
+
+.rest-dock-progress {
+  height: 3px;
+  background: var(--primary-soft);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.rest-dock-progress > i {
+  display: block;
+  height: 3px;
+  width: 52%;
+  background: linear-gradient(90deg, var(--primary), #777be8);
+  border-radius: 2px;
+}
+
+.rest-dock-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dock-adj-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--divider);
+  background: var(--primary-tint);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.dock-adj-btn:active {
+  transform: scale(0.95);
+  background: var(--primary-soft);
+}
+
+.dock-start-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  border: 0;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.dock-start-btn:active {
+  transform: scale(0.98);
+}
+
+/* ---------- 规则行：给算法边界一个用户能读懂的说法 ---------- */
+
+.rule {
+  display: flex;
+  padding: 9px 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.rule .no {
+  flex: 0 0 auto;
+  width: 24px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.rule b {
+  color: var(--text-primary);
+}
+
+/* ---------- 周期视图：8 次训练一条,带实际完成情况 ---------- */
+
+/*
+ * 原递进表把 8 次训练画成 4 张周卡，占了一整屏还看不到全貌。
+ * 压成一条 8 格的带子：高度代表重量,底色代表状态,
+ * 一眼看出「第 5 次开始就没跟上」这种趋势。
+ */
+.cyc {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 96px;
+}
+
+.cyc .b {
+  flex: 1;
+  min-width: 0;
+  border-radius: 6px 6px 0 0;
+  background: #e4e5ee;
+  position: relative;
+  cursor: pointer;
+}
+
+.cyc .b.done {
+  background: var(--green);
+}
+
+/* 实际低于建议的那几次：橙色,说明递进断了 */
+.cyc .b.miss {
+  background: var(--orange);
+}
+
+.cyc .b.now {
+  background: var(--primary);
+}
+
+.cyc-axis {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.cyc-axis span {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+/* 图例 */
+.cyc-key {
+  display: flex;
+  gap: 14px;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.cyc-key i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 4px;
+}
+
+/* ---------- 停滞提示：两次没进步就该动别的变量 ---------- */
+
+/*
+ * 十年经验里最常见的失败模式不是「不知道加多少」,
+ * 而是「卡住了还在硬加」。连续两次同重量同次数就提示换策略。
+ */
+.stall {
+  border-radius: 12px;
+  background: rgba(221, 110, 60, 0.08);
+  border: 1px solid rgba(221, 110, 60, 0.22);
+  padding: 12px 14px;
+}
+
+.stall .hd {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--orange);
+}
+
+.stall .bd {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ---------- 首页：三分化的循环位置 ---------- */
+
+/*
+ * 三分化是「循环」而不是「周计划」,所以首页要回答的是
+ * 「这个循环走到哪了」,不是「本周完成率 20%」。
+ * D1/D2/D3 三格,已完成实心、今天主色、未到浅底。
+ */
+.day-strip {
+  display: flex;
+  gap: 8px;
+}
+
+.day-strip .d {
+  flex: 1;
+  min-width: 0;
+  border-radius: 12px;
+  background: #edeef4;
+  padding: 10px 0 9px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.day-strip .d .k {
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+.day-strip .d .v {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.day-strip .d.done {
+  background: rgba(62, 169, 122, 0.12);
+}
+
+.day-strip .d.done .v {
+  color: var(--green);
+}
+
+.day-strip .d.today {
+  background: var(--primary);
+}
+
+.day-strip .d.today .k {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.day-strip .d.today .v {
+  color: #fff;
+}
+
+/* 建议选项：减重复做 / 降组数 / 换动作,三选一 */
+.stall .opts {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.stall .opts div {
+  flex: 1;
+  min-width: 0;
+  border-radius: 10px;
+  background: var(--card);
+  padding: 9px 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* ================================================================
+ * 计划编排页（plan-edit.html / exercise-edit.html）
+ * ================================================================ */
+
+/* 训练日 tab 切换 */
+.plan-tabs {
+  display: flex;
+  gap: 8px;
+  background: var(--divider);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.plan-tabs .pt {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.plan-tabs .pt.on {
+  background: var(--card);
+  color: var(--primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* 动作编辑行 */
+.ex-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.ex-edit-row .drag {
+  font-size: 16px;
+  color: var(--text-faint);
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.ex-edit-row .drag:active {
+  cursor: grabbing;
+}
+
+/* 新增动作按钮 */
+.add-ex-btn {
+  width: 100%;
+  border: 1.5px dashed var(--divider);
+  border-radius: 12px;
+  padding: 14px 0;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-ex-btn:hover {
+  background: var(--primary-tint);
+  border-color: var(--primary);
+}
+
+/* 字段标签 */
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* 文本输入框 */
+.text-input {
+  width: 100%;
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+  color: var(--text-primary);
+  background: var(--card);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.text-input:focus {
+  border-color: var(--primary);
+}
+
+.text-input::placeholder {
+  color: var(--text-faint);
+}
+
+/* 紧凑步进器（用于组数等单行字段） */
+.stepper-compact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-btn-s {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  border: none;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.step-btn-s:active {
+  transform: scale(0.94);
+}
+
+.stepper-compact .val {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 28px;
+  text-align: center;
+}
+
+/* 递进方式选择行 */
+.prog-type-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--divider);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.prog-type-row.on {
+  border-color: var(--primary);
+  background: var(--primary-tint);
+}
+
+.prog-type-row .radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  border: 1.5px solid var(--text-faint);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.prog-type-row .radio.on {
+  border-color: var(--primary);
+  background: var(--primary);
+  box-shadow: inset 0 0 0 3px var(--card);
+}
+
+/* 轮廓按钮（删除动作） */
+.cta-outline {
+  width: 100%;
+  border: 1.5px solid var(--orange);
+  border-radius: 26px;
+  padding: 16px 0;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--orange);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cta-outline:active {
+  transform: scale(0.98);
+  background: rgba(221, 110, 60, 0.08);
+}
+
+/* ============ 资深老铁特化组件 ============ */
+
+/* 幽灵组历史对标 (Ghost Set) */
+.ghost-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--primary-tint);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.ghost-row .tag {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.ghost-row .delta {
+  font-size: 11px;
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* 杠铃片算盘 (Plate Calculator) */
+.plate-calc {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f4f5fa;
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.plate-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: var(--primary-soft);
+  color: var(--primary-deep);
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/* 热身组阶梯条 (Warm-up Ladder) */
+.warm-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(62, 169, 122, 0.08);
+  border: 1px solid rgba(62, 169, 122, 0.25);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--green);
+}
+
+.warm-banner .btn {
+  background: var(--green);
+  color: #fff;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 动作孔位 / 调位备忘 */
+.memo-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #fff9ed;
+  border-radius: 8px;
+  border: 1px dashed #e8cb8d;
+  font-size: 12px;
+  color: #8c6018;
+}
+
+.memo-box .memo-text {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.5;
+}
+
+.memo-box .memo-action {
+  flex: 0 0 auto;
+  padding: 2px 0;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+/* 练中一键替换动作 */
+.swap-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f6f7fb;
+  margin-top: 8px;
+}
+
+.swap-option .btn {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 停滞/周期 4 格选项 (含减载周) */
+.stall .opts.grid4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.stall .opts.grid4 > div {
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--divider);
+  padding: 9px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.stall .opts.grid4 > div.highlight {
+  border-color: var(--primary);
+  background: var(--primary-tint);
+  color: var(--primary);
+}
+
+/* ============ 资深老铁特化组件 ============ */
+
+/* 1. 出门前装备建议清单 (Gear Box) */
+.gear-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--primary-tint);
+  border: 1px dashed rgba(255, 87, 34, 0.25);
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+:root[data-theme="blue"] .gear-box { border-color: rgba(37, 99, 235, 0.25); }
+:root[data-theme="cyan"] .gear-box { border-color: rgba(2, 132, 199, 0.25); }
+:root[data-theme="emerald"] .gear-box { border-color: rgba(5, 150, 105, 0.25); }
+:root[data-theme="gold"] .gear-box { border-color: rgba(217, 119, 6, 0.25); }
+:root[data-theme="purple"] .gear-box { border-color: rgba(91, 95, 199, 0.25); }
+
+/* 2. 肌群超量恢复雷达卡 (Muscle Recovery) */
+.recovery-card {
+  padding: 14px 16px;
+  background: var(--card);
+  border-radius: 14px;
+}
+.recovery-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 13px;
+}
+.recovery-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: #e8eaf2;
+  overflow: hidden;
+  flex: 1;
+  margin: 0 12px;
+}
+.recovery-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--primary);
+}
+
+/* 3. 练中直输大九宫格键盘 (Gym Number Pad) */
+.numpad-drawer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background: #ffffff;
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.16);
+  padding: 16px 20px 24px;
+}
+.numpad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--divider);
+}
+.numpad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+.numpad-key {
+  height: 48px;
+  border-radius: 12px;
+  border: 0;
+  background: #f0f2f8;
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.numpad-key:active {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+.numpad-quick-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+.quick-chip {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 4. 单侧弱侧平衡记录 (Unilateral Reps) */
+.unilateral-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+.side-cell {
+  background: #f8f9fc;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  border: 1.5px solid var(--divider);
+}
+.side-cell.weak {
+  border-color: var(--primary);
+  background: var(--primary-tint);
+}
+.side-cell .side-lbl {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.side-cell .side-val {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+/* 5. 历史天花板 PR 勋章 (All-Time PR) */
+.alltime-pr {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #92400e;
+  background: #fef3c7;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* 6. 超级组编排 (Supersets) */
+.superset-card {
+  border-left: 3px solid var(--primary);
+  background: linear-gradient(90deg, var(--primary-tint) 0%, transparent 100%);
+  padding: 10px 12px;
+  border-radius: 0 10px 10px 0;
+  margin: 6px 0;
+}
+
+/* 7. 极简硬核战报卡片 (Workout Story Card) */
+.story-card {
+  background: #111219;
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 24px 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+.story-card::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  background: var(--primary);
+  filter: blur(40px);
+  opacity: 0.4;
+}
+.story-hd {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.story-logo {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+.story-logo span {
+  color: var(--primary);
+}
+.story-date {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.story-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 20px 0 16px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.story-stat-v {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+}
+.story-stat-k {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 3px;
+}
+.story-pr-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ============ 个人档案 (Profile) ============ */
+.profile-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.avatar-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-deep) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+.body-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.metric-card {
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--divider);
+}
+.metric-card .lbl {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.metric-card .val {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-top: 4px;
+}
+.metric-card .val span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+.metric-card .sub-tip {
+  font-size: 11px;
+  color: var(--green);
+  margin-top: 2px;
+}
+
+/* ============ 训练日历统计 (History Calendar) ============ */
+.cal-container {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px 14px;
+}
+.cal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.cal-month-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-faint);
+  margin-bottom: 8px;
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  row-gap: 8px;
+}
+.cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s;
+}
+.cal-day.other-month {
+  color: #c4c6d6;
+}
+.cal-day.today {
+  border: 1.5px solid var(--primary);
+}
+.cal-day.selected {
+  background: var(--primary-tint);
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+  font-weight: 800;
+}
+.cal-day.workout {
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 700;
+}
+.cal-day .workout-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--primary);
+  margin-top: 2px;
+}
+.cal-day.rest-day {
+  background: #f0f1f7;
+  color: var(--text-secondary);
+}
+.cal-day.rest-day .workout-dot {
+  background: #9a9cae;
+}
+.cal-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--divider);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.cal-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+}
+.cal-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.cal-stat-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+}
+.cal-stat-card .v {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+.cal-stat-card .k {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 3px;
+}
+
+/* ---------- 现实自适应防护体系样式 (Readiness, Return & Pain-Free) ---------- */
+
+/* 1. 今日状态与就绪度选择条 */
+.readiness-strip {
+  display: flex;
+  background: var(--input-bg);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 4px;
+}
+.readiness-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.readiness-btn.on {
+  background: var(--card);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.readiness-btn.tired.on {
+  color: #d97706;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
+
+/* 2. 出差 / 断训回归保护模式卡片 */
+.return-shield-banner {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+.return-shield-banner .title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e40af;
+}
+.return-shield-banner .desc {
+  font-size: 12px;
+  color: #3b82f6;
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+/* 3. 关节不适 / 无痛安全变式替换抽屉与卡片 */
+.pain-free-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.pain-free-drawer {
+  background: #fdfefe;
+  border: 1.5px dashed var(--primary);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-top: 10px;
+}
+.swap-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 6px;
+  cursor: pointer;
+}
+.swap-item:hover {
+  border-color: var(--primary);
+}
+
+/* ---------- 4 大老铁人性化细节样式 ---------- */
+
+/* 1. 杠铃片彩色装配指引 */
+.plate-visual-loader {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 10px;
+}
+.plate-stack {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.olympic-plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.plate-red { background: #dc2626; }
+.plate-blue { background: #2563eb; }
+.plate-yellow { background: #d97706; }
+.plate-green { background: #059669; }
+.plate-white { background: #64748b; }
+.plate-small { background: #475569; font-size: 11px; height: 26px; padding: 0 8px; }
+
+/* 2. 科学热身阶梯 */
+.warmup-ladder-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-top: 10px;
+}
+.ladder-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 12px;
+}
+.ladder-step:not(:last-child) {
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+/* 3. 晚高峰动作对调抽屉 */
+.action-swap-sheet {
+  background: var(--card);
+  border: 1.5px solid var(--primary);
+  border-radius: 14px;
+  padding: 14px;
+  margin-top: 10px;
+}
+.swap-action-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--input-bg);
+  border-radius: 8px;
+  margin-top: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.swap-action-row.active {
+  background: var(--primary-tint);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* 4. 突破 PR 暗金高光与激励 */
+.pr-glow-card {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1.5px solid #f59e0b;
+  border-radius: 14px;
+  padding: 12px 14px;
+  animation: pulse-gold 2s infinite ease-in-out;
+}
+@keyframes pulse-gold {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+

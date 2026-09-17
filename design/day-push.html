@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 1 推日 · 5 个动作</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<!--
+  对应 TrainingPages.kt 的 DayPage(day = 1)，卡片结构照 ExerciseCard.kt：
+  26dp 编号方框 + 动作名 + 单手标注 / 标签行 / 描述 / 组数·强度·次数 /
+  建议重量 / 递进逻辑 / 执行要点 / 记录入口。
+
+  文案（name / description / sets / reps / rpe / progression / tips / tags）
+  全部照搬 TrainingPlan.kt 的 days[0].exercises，没有改写。
+  建议重量由 WeightCalculator.kt 的 calcExerciseWeight 按卧推 1RM 70kg 算出。
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <div class="screen">
+    <div style="padding-top:90px">
+      <div class="row" style="padding:10px 16px 8px">
+        <a href="plan.html" style="font-size:19px;color:var(--text-secondary);text-decoration:none">‹</a>
+        <div style="width:14px"></div>
+        <span class="t15 sec grow">Day 1 · 推日设计蓝图</span>
+        <a class="t13 pri bold" href="plan-edit.html?day=1" style="text-decoration:none">🛠️ 自定义编排 ›</a>
+      </div>
+    </div>
+
+    <div class="px16">
+      <div class="row">
+        <span style="font-size:26px">🏋️</span>
+        <div style="width:10px"></div>
+        <div class="grow">
+          <div class="form-title">推日</div>
+          <div class="sp3"></div>
+          <div class="t13 sec">胸 + 三角肌中束 + 肱三头肌</div>
+        </div>
+      </div>
+      <div class="sp12"></div>
+      <!-- summary 原文，一字未改 -->
+      <div class="t13 sec" style="line-height:1.7">
+        这一天的主线是"推"，动作安排上有讲究。杠铃卧推是主项，也是整套计划里最核心的复合动作。Day 1 没有直接推肩，因为前面动作已经大量使用三角肌前束。
+      </div>
+      <div class="sp16"></div>
+    </div>
+
+    <!-- ============ 1 杠铃卧推 ============ -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-num">1</span>
+          <div style="width:10px"></div>
+          <span class="t15 semi grow">杠铃卧推</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="tag-row">
+          <span class="tg">复合动作</span>
+          <span class="tg">主线推进</span>
+          <span class="tg">不力竭</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="t13 sec" style="line-height:1.7">
+          整套计划里最核心的复合动作。自由重量的动作轨迹天然就比固定器械更"诚实"，能暴露身体问题。如果快触胸时肩悬前了，或胸椎活动度不够下不去，说明需要补强。
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row gap12">
+          <div class="info-cell grow"><div class="k">组数</div><div class="v">4 组</div></div>
+          <div class="info-cell grow"><div class="k">强度</div><div class="v">RPE 8</div></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="info-cell"><div class="k">次数</div><div class="v">15/12/10/8 → 过渡到 4×8 → 2×6 逐步加至 4×6</div></div>
+        <div class="sp12"></div>
+
+        <!-- LINEAR：绿色徽标 + 「第 N 次 · +2.5kg/次」，同 WeightDisplay.kt 的 LINEAR 分支 -->
+        <div class="row">
+          <span class="w-badge linear">~ 45 kg · RPE 8</span>
+          <div style="width:8px"></div>
+          <span class="w-note">第 1 次 · +2.5kg/次</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="row">
+          <span class="t13 sec grow">本月 8 次训练的完整递进</span>
+          <a class="inline-edit" href="progression-v2.html" style="text-decoration:none">展开</a>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="detail">
+          <div class="k">📈 递进逻辑</div>
+          <div class="v">线性递进，波浪式推进：容量先升后降，强度一直往上走。每次训练只动一个变量，不要同时加重量又加组数。前几次训练为熟悉期（15/12/10/8），熟悉后全部换成 3×8，再过渡到 4×8，然后降容量到 2×6 再逐步加到 4×6。</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="detail tip">
+          <div class="k">💡 执行要点</div>
+          <div class="v">别用器械替代。杠铃卧推能给你最大的机械张力。不是力竭！RPE 8 意味着做完规定次数后感觉自己还能再做 2 个。</div>
+        </div>
+        <div class="sp12"></div>
+
+        <!--
+          这条是实现时必须处理的坑，不是给用户看的内容 —— 真做的时候
+          要么让 reps 支持逐组数组，要么给 EXERCISE_WEIGHT_MAP 加一个 targetReps 字段。
+        -->
+        <div class="warn">
+          <b>实现注意</b>parseTargetReps 只取 reps 里的第一个数字，"15/12/10/8" 会解析成 15，算出 45kg。这个值只对第一组成立，第 4 组该是 8 次对应的 56kg。逐组重量需要单独一条链路，不能沿用单一 targetReps。
+        </div>
+      </div>
+      <div class="sp12"></div>
+    </div>
+
+    <!-- ============ 2 哑铃上斜卧推 ============ -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-num">2</span>
+          <div style="width:10px"></div>
+          <span class="t15 semi grow">哑铃上斜卧推</span>
+          <span class="hand">哑铃 · 单手</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="tag-row">
+          <span class="tg">辅项</span>
+          <span class="tg">上胸</span>
+          <span class="tg">可控力竭</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="t13 sec" style="line-height:1.7">
+          选上斜哑铃而不选固定器械，因为哑铃能让你找到从肩到上胸的完整发力轨迹，活动度要求比杠铃低，对新手友好。
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row gap12">
+          <div class="info-cell grow"><div class="k">组数</div><div class="v">4 组</div></div>
+          <div class="info-cell grow"><div class="k">强度</div><div class="v">RPE 8（留2-3个余量）</div></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="info-cell"><div class="k">次数</div><div class="v">12 次</div></div>
+        <div class="sp12"></div>
+
+        <!-- SEMI：橙色 + 「起步 / 熟练后再递进」 -->
+        <div class="row">
+          <span class="w-badge semi">~ 17.5 kg / 只 起步</span>
+          <div style="width:8px"></div>
+          <span class="w-note">熟练后再递进</span>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="detail">
+          <div class="k">📈 递进逻辑</div>
+          <div class="v">后续训练时可以把最后一组推到 RPE 9-9.5，再熟练后最多允许最后 2 组做到力竭。</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="detail tip">
+          <div class="k">💡 执行要点</div>
+          <div class="v">不要一上来就力竭！动作不标准的时候力竭，练的不是目标肌肉，而是在练代偿。</div>
+        </div>
+      </div>
+      <div class="sp12"></div>
+    </div>
+
+    <!-- ============ 3 双杠臂屈伸 ============ -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-num">3</span>
+          <div style="width:10px"></div>
+          <span class="t15 semi grow">双杠臂屈伸</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="tag-row">
+          <span class="tg">复合动作</span>
+          <span class="tg">下胸+三头</span>
+          <span class="tg">可力竭</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="t13 sec" style="line-height:1.7">
+          练下胸、三头、肩膀前束，一个动作覆盖三个部位，属于远固定的复合训练。
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row gap12">
+          <div class="info-cell grow"><div class="k">组数</div><div class="v">4 组</div></div>
+          <div class="info-cell grow"><div class="k">强度</div><div class="v">可力竭</div></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="info-cell"><div class="k">次数</div><div class="v">12 次</div></div>
+        <div class="sp12"></div>
+
+        <div class="row">
+          <span class="w-badge semi">~ 42.5 kg 起步</span>
+          <div style="width:8px"></div>
+          <span class="w-note">总负荷参考 · 含自重</span>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="detail">
+          <div class="k">📈 递进逻辑</div>
+          <div class="v">如果只能做 6 个就力竭了，那就做 6 个，不要为了凑次数而变形。力量增长后自然能做到 12 次。</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="detail tip">
+          <div class="k">💡 执行要点</div>
+          <div class="v">做不了标准双杠臂屈伸？退阶方式：跪在垫子上撑着凳子做，或用弹力带辅助。</div>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="warn">
+          <b>实现注意</b>双杠是自重动作，42.5kg 是「你能推起的总负荷」，不是要挂的配重。配重 = 总负荷 − 体重，多数人为负数，也就是该用弹力带减负。真做的时候需要一个 bodyweight 字段参与换算，现在的 EXERCISE_WEIGHT_MAP 里没有。
+        </div>
+      </div>
+      <div class="sp12"></div>
+    </div>
+
+    <!-- ============ 4 仰卧臂屈伸（肩屈位） ============ -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-num">4</span>
+          <div style="width:10px"></div>
+          <span class="t15 semi grow">仰卧臂屈伸（肩屈位）</span>
+          <span class="hand">哑铃 · 单手</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="tag-row">
+          <span class="tg">单关节</span>
+          <span class="tg">三头长头</span>
+          <span class="tg">可力竭</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="t13 sec" style="line-height:1.7">
+          肩屈位的意思是手臂举过头顶来做，这样练的是三头肌的长头。
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row gap12">
+          <div class="info-cell grow"><div class="k">组数</div><div class="v">4 组</div></div>
+          <div class="info-cell grow"><div class="k">强度</div><div class="v">RPE 8</div></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="info-cell"><div class="k">次数</div><div class="v">15 次</div></div>
+        <div class="sp12"></div>
+
+        <!-- FIXED：主色 + 「固定重量 · 触力竭即可」 -->
+        <div class="row">
+          <span class="w-badge fixed">~ 7.5 kg / 只 参考</span>
+          <div style="width:8px"></div>
+          <span class="w-note">固定重量 · 触力竭即可</span>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="detail">
+          <div class="k">📈 递进逻辑</div>
+          <div class="v">递进逻辑：先加 1 组 12 次（3组15次 + 1组12次），再加 2 组 12 次，以此类推。在 12 次基础上熟练后，最后两组可做到力竭，然后加重量。</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="detail tip">
+          <div class="k">💡 执行要点</div>
+          <div class="v">肩屈位能够更好地孤立三头肌长头，减少其他肌群借力。</div>
+        </div>
+      </div>
+      <div class="sp12"></div>
+    </div>
+
+    <!-- ============ 5 Y字侧平举 ============ -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-num">5</span>
+          <div style="width:10px"></div>
+          <span class="t15 semi grow">Y字侧平举</span>
+          <span class="hand">哑铃 · 单手</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="tag-row">
+          <span class="tg">单关节</span>
+          <span class="tg">三角肌中束</span>
+          <span class="tg">力竭</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="t13 sec" style="line-height:1.7">
+          外旋位的侧平举：手肘微微向外打开，三头借不了力，二头也使不上劲，基本只能靠中束顶着做。
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row gap12">
+          <div class="info-cell grow"><div class="k">组数</div><div class="v">3 组</div></div>
+          <div class="info-cell grow"><div class="k">强度</div><div class="v">至力竭</div></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="info-cell"><div class="k">次数</div><div class="v">10次 → 休息5秒 → 再10次到力竭</div></div>
+        <div class="sp12"></div>
+
+        <div class="row">
+          <span class="w-badge fixed">~ 2.5 kg / 只 参考</span>
+          <div style="width:8px"></div>
+          <span class="w-note">固定重量 · 触力竭即可</span>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="detail">
+          <div class="k">📈 递进逻辑</div>
+          <div class="v">找一个做 20 次左右就会力竭的重量，保持这个重量持续训练。</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="detail tip">
+          <div class="k">💡 执行要点</div>
+          <div class="v">Day 1 没有直接推肩动作，因为前面四个动作已经大量使用了三角肌前束，再加推肩的话肩膀疲劳很难管理。</div>
+        </div>
+        <div class="sp12"></div>
+
+        <!-- 这个动作带组内休息，和普通组间休息不是一回事 -->
+        <div class="warn">
+          <b>实现注意</b>「10次 → 休息5秒 → 再10次」是组内 rest-pause，跟记录页的组间休息倒计时是两套时长。逐组记录需要支持一组里两段次数，或者把它拆成两条子组。
+        </div>
+      </div>
+      <div class="sp18"></div>
+    </div>
+
+    <!-- 上下日跳转，同 DayPage 底部的 prev / next -->
+    <div class="px16">
+      <div class="day-nav">
+        <a href="day-legs.html">‹ Day 3 腿日</a>
+        <a href="day-pull.html">Day 2 拉日 ›</a>
+      </div>
+      <div class="sp12"></div>
+      <a class="s-card row" href="principles.html" style="text-decoration:none;color:inherit">
+        <span style="font-size:20px">📋</span>
+        <div style="width:12px"></div>
+        <div class="grow">
+          <div class="t15 semi">查看训练原则</div>
+          <div class="sp3"></div>
+          <div class="t13 faint">为什么主项不力竭、RPE 8 到底是什么感觉</div>
+        </div>
+        <span class="t15 pri">›</span>
+      </a>
+      <div style="height:96px"></div>
+    </div>
+  </div>
+
+  <div class="sticky-bar">
+    <div class="divider"></div>
+    <div class="inner"><a class="cta" href="record-v2.html" style="text-decoration:none">开始推日训练 ›</a></div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+</body>
+</html>

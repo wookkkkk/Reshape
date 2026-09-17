@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>完整计划 · 3 个训练日 15 个动作</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<!--
+  计划总览。内容来自 TrainingPlan.kt 的 trainingPlan：
+  3 个训练日、每天 5 个动作，一共 15 个 —— 跟 EXERCISE_WEIGHT_MAP 一一对应。
+
+  右侧建议重量全部由 WeightCalculator.kt 的 calcExerciseWeight 算出，
+  用的是本页顶部那三个 1RM（深蹲 90 / 卧推 70 / 硬拉 120）。
+  哑铃动作的系数已折算成单手，所以标「kg/只」。
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <div class="screen">
+    <div style="padding-top:90px">
+      <div class="row" style="padding:10px 100px 8px 16px">
+        <a href="home-v2.html" style="font-size:19px;color:var(--text-secondary);cursor:pointer;text-decoration:none">‹</a>
+        <div style="width:14px"></div>
+        <span class="t15 sec">完整计划大纲</span>
+      </div>
+    </div>
+
+    <div class="px16">
+      <div class="plan-title">凯圣王 × 谭成义<br>2026 三分化训练计划</div>
+      <div class="sp8"></div>
+      <div class="t13 sec" style="line-height:1.65">
+        推 / 拉 / 腿三天一轮，每个部位每周练到 2 次。主项线性递进，辅项先把动作做对。
+      </div>
+      <div class="sp18"></div>
+    </div>
+
+    <!--
+      三大项放在最上面，因为下面每一个建议重量都是从这三个数推出来的。
+      横排三格而不是竖着三行：它们是同一类东西，竖排会读成三件事。
+    -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="lift-strip">
+          <div class="lift-cell">
+            <div class="v">90</div>
+            <div class="k">深蹲</div>
+          </div>
+          <div class="v-divider"></div>
+          <div class="lift-cell">
+            <div class="v">70</div>
+            <div class="k">卧推</div>
+          </div>
+          <div class="v-divider"></div>
+          <div class="lift-cell">
+            <div class="v">120</div>
+            <div class="k">硬拉</div>
+          </div>
+        </div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="sp12"></div>
+        <div class="row">
+          <span class="t13 sec grow">下面 15 个动作的建议重量都由这三个数推出</span>
+          <a class="t13 pri" href="one-rep-max.html" style="text-decoration:none">修改 ›</a>
+        </div>
+      </div>
+      <div class="sp18"></div>
+    </div>
+
+    <!-- ============ Day 1 推日 ============ -->
+    <div class="px16">
+      <div class="s-card p0">
+        <a class="day-head" href="day-push.html">
+          <span class="icon">🏋️</span>
+          <div class="grow">
+            <div class="name">Day 1 · 推日</div>
+            <div class="focus">胸 + 三角肌中束 + 肱三头肌</div>
+          </div>
+          <span class="t13 pri">5 个动作 ›</span>
+        </a>
+        <div class="divider"></div>
+
+        <!-- 15/12/10/8 是波浪式推进，parseTargetReps 抓到第一个数 15，所以是 45 -->
+        <div class="mv-row">
+          <span class="mv-no">1</span>
+          <div class="grow">
+            <div class="mv-name">杠铃卧推</div>
+            <div class="mv-meta">4 组 × 15/12/10/8 · RPE 8 · 线性</div>
+          </div>
+          <div class="mv-w"><span class="n">45</span><span class="u">kg</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">2</span>
+          <div class="grow">
+            <div class="mv-name">哑铃上斜卧推</div>
+            <div class="mv-meta">4 组 × 12 次 · RPE 8 · 半递进</div>
+          </div>
+          <div class="mv-w"><span class="n">17.5</span><span class="u">kg/只</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">3</span>
+          <div class="grow">
+            <div class="mv-name">双杠臂屈伸</div>
+            <div class="mv-meta">4 组 × 12 次 · 可力竭 · 半递进</div>
+          </div>
+          <div class="mv-w"><span class="n">42.5</span><span class="u">kg</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">4</span>
+          <div class="grow">
+            <div class="mv-name">仰卧臂屈伸（肩屈位）</div>
+            <div class="mv-meta">4 组 × 15 次 · RPE 8 · 固定</div>
+          </div>
+          <div class="mv-w"><span class="n">7.5</span><span class="u">kg/只</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">5</span>
+          <div class="grow">
+            <div class="mv-name">Y字侧平举</div>
+            <div class="mv-meta">3 组 × 10 次至力竭 · 固定</div>
+          </div>
+          <div class="mv-w"><span class="n">2.5</span><span class="u">kg/只</span></div>
+        </div>
+        <div class="sp6"></div>
+      </div>
+      <div class="sp12"></div>
+    </div>
+
+    <!-- ============ Day 2 拉日 ============ -->
+    <div class="px16">
+      <div class="s-card p0">
+        <a class="day-head" href="day-pull.html">
+          <span class="icon">🔙</span>
+          <div class="grow">
+            <div class="name">Day 2 · 拉日</div>
+            <div class="focus">背 + 三角肌后束 + 肱二头肌</div>
+          </div>
+          <span class="t13 pri">5 个动作 ›</span>
+        </a>
+        <div class="divider"></div>
+
+        <!--
+          32.5 是按 12 次算的正确值。当前 parseTargetReps 会从「前3组 12次…」里
+          抓到 3，算成 45kg —— 这里写的是应该显示的数，坑记在 day-pull.html 上。
+        -->
+        <div class="mv-row">
+          <span class="mv-no">1</span>
+          <div class="grow">
+            <div class="mv-name">单手钢线下拉</div>
+            <div class="mv-meta">4 组 × 12 次 + 力竭组 · 半递进</div>
+          </div>
+          <div class="mv-w"><span class="n">32.5</span><span class="u">kg</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">2</span>
+          <div class="grow">
+            <div class="mv-name">对握下拉</div>
+            <div class="mv-meta">4 组 × 8–12 次 · RPE 8 · 线性</div>
+          </div>
+          <div class="mv-w"><span class="n">62.5</span><span class="u">kg</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">3</span>
+          <div class="grow">
+            <div class="mv-name">单手器械划船</div>
+            <div class="mv-meta">4 组 × 10 次 + 力竭组 · 半递进</div>
+          </div>
+          <div class="mv-w"><span class="n">50</span><span class="u">kg</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">4</span>
+          <div class="grow">
+            <div class="mv-name">坐姿开肘划船</div>
+            <div class="mv-meta">4 组 × 12 次 · RPE 8 · 半递进</div>
+          </div>
+          <div class="mv-w"><span class="n">32.5</span><span class="u">kg</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">5</span>
+          <div class="grow">
+            <div class="mv-name">钢线弯举（肩屈位）</div>
+            <div class="mv-meta">3 组 × 12 次 · RPE 8 · 固定</div>
+          </div>
+          <div class="mv-w"><span class="n">7.5</span><span class="u">kg/只</span></div>
+        </div>
+        <div class="sp6"></div>
+      </div>
+      <div class="sp12"></div>
+    </div>
+
+    <!-- ============ Day 3 腿日 ============ -->
+    <div class="px16">
+      <div class="s-card p0">
+        <a class="day-head" href="day-legs.html">
+          <span class="icon">🦵</span>
+          <div class="grow">
+            <div class="name">Day 3 · 腿日</div>
+            <div class="focus">下肢（以后侧链为主）</div>
+          </div>
+          <span class="t13 pri">5 个动作 ›</span>
+        </a>
+        <div class="divider"></div>
+
+        <div class="mv-row">
+          <span class="mv-no">1</span>
+          <div class="grow">
+            <div class="mv-name">单腿硬拉</div>
+            <div class="mv-meta">4 组 × 10 次 · RPE 8 · 半递进</div>
+          </div>
+          <div class="mv-w"><span class="n">20</span><span class="u">kg/只</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">2</span>
+          <div class="grow">
+            <div class="mv-name">保加利亚分腿蹲</div>
+            <div class="mv-meta">4 组 × 10 次 · RPE 8 · 半递进</div>
+          </div>
+          <div class="mv-w"><span class="n">20</span><span class="u">kg/只</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">3</span>
+          <div class="grow">
+            <div class="mv-name">颈前深蹲</div>
+            <div class="mv-meta">4 组 × 10 次 · RPE 8 · 线性</div>
+          </div>
+          <div class="mv-w"><span class="n">55</span><span class="u">kg</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">4</span>
+          <div class="grow">
+            <div class="mv-name">罗马尼亚硬拉</div>
+            <div class="mv-meta">4 组 × 10 次 · RPE 8 · 线性</div>
+          </div>
+          <div class="mv-w"><span class="n">70</span><span class="u">kg</span></div>
+        </div>
+        <div class="mv-row">
+          <span class="mv-no">5</span>
+          <div class="grow">
+            <div class="mv-name">山羊挺身</div>
+            <div class="mv-meta">4 组 × 15 次 · RPE 8 · 半递进</div>
+          </div>
+          <div class="mv-w"><span class="n">20</span><span class="u">kg</span></div>
+        </div>
+        <div class="sp6"></div>
+      </div>
+      <div class="sp18"></div>
+    </div>
+
+    <!-- 三分化 vs 五分化。两栏并排，因为这就是一次对比 -->
+    <div class="px16">
+      <div class="t15 semi">为什么是三分化</div>
+      <div class="sp12"></div>
+      <div class="row top gap12">
+        <div class="cmp-col ours">
+          <div class="head">三分化</div>
+          <div class="li">每周每个部位练到 2 次，训练频率更高</div>
+          <div class="li">高频低容量，肌肉蛋白合成窗口利用更充分</div>
+          <div class="li">适合大多数人的训练节奏</div>
+          <div class="li">每周 3–6 天，灵活性高</div>
+        </div>
+        <div class="cmp-col other">
+          <div class="head">五分化</div>
+          <div class="li">每周每个部位只练 1 次</div>
+          <div class="li">低频高容量，单次训练量很大</div>
+          <div class="li">恢复时间充裕，适合有经验的训练者</div>
+          <div class="li">固定 5 天，灵活性较低</div>
+        </div>
+      </div>
+      <div class="sp18"></div>
+    </div>
+
+    <div class="px16">
+      <a class="s-card row" href="principles.html" style="text-decoration:none;color:inherit">
+        <span style="font-size:20px">📋</span>
+        <div style="width:12px"></div>
+        <div class="grow">
+          <div class="t15 semi">训练原则与执行要点</div>
+          <div class="sp3"></div>
+          <div class="t13 faint">力竭判断 · RPE 概念 · 休息策略</div>
+        </div>
+        <span class="t15 pri">›</span>
+      </a>
+      <div class="sp16"></div>
+    </div>
+
+    <!--
+      这条说清楚计划和本次训练的关系。用户最容易困惑的就是
+      「我改了这次的重量，计划会不会跟着变」。
+    -->
+    <div class="px16">
+      <div class="t13 faint" style="line-height:1.7">
+        计划本身不记录数据。每次点「开始训练」会按当天的动作生成一次训练，
+        重量次数记在那一次里；计划只负责给出下一次的建议值。
+      </div>
+      <div style="height:96px"></div>
+    </div>
+  </div>
+
+  <div class="sticky-bar">
+    <div class="inner">
+      <a class="cta" href="record-v2.html" style="text-decoration:none">开始今天训练 · Day 3 腿日 ›</a>
+    </div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+</body>
+</html>

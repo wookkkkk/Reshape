@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>训练计划编排</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<!--
+  训练计划编排页（与完整计划 15 动作及推/拉/腿蓝图 100% 联动）：
+  1. 顶部 Tab 自由切换 D1 推 / D2 拉 / D3 腿，对应展示 15 个精准动作与重量
+  2. 动态直通对应训练日的官方设计逻辑（day-push.html / day-pull.html / day-legs.html）
+  3. 支持长按拖动排序、删除、动作配置及一键恢复官方经典模板
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">▮▮▮ ⌁ ▰</span>
+  </div>
+  <div class="capsule">··· <span class="sep"></span> ⊙</div>
+
+  <div class="screen">
+    <div style="padding-top:90px">
+      <div class="row" style="padding:10px 100px 8px 16px">
+        <a href="home-v2.html" style="font-size:19px;color:var(--text-secondary);cursor:pointer;text-decoration:none">‹</a>
+        <div style="width:14px"></div>
+        <span class="t15 sec">训练计划编排</span>
+      </div>
+    </div>
+
+    <!-- 官方蓝图参考与三个训练日 tab -->
+    <div class="px16">
+      <div class="row" style="margin-bottom:10px">
+        <span class="t12 sec grow">以官方经典模板为基础编排</span>
+        <a id="blueprintLink" class="t12 pri bold" href="day-push.html" style="text-decoration:none">📖 查看 D1 推日设计逻辑 ›</a>
+      </div>
+      <div class="plan-tabs">
+        <div class="pt on" onclick="switchDay(1)">D1 推</div>
+        <div class="pt" onclick="switchDay(2)">D2 拉</div>
+        <div class="pt" onclick="switchDay(3)">D3 腿</div>
+      </div>
+    </div>
+    <div class="sp14"></div>
+
+    <!-- D1 推日动作列表 -->
+    <div class="px16 day-panel" id="panel-d1">
+      <div class="s-card p0">
+        <!-- 动作 1 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">杠铃卧推</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:var(--primary-soft);color:var(--primary)">线性 +2.5kg</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">4 组 × 15/12/10/8 · 47.5 kg · 休息 120 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 2 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">哑铃上斜卧推</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">哑铃/只</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 组 × 12 次 · 17.5 kg / 只 · 休息 90 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 3 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">双杠臂屈伸</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">自重+配重</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 组 × 8-10 次 · 自重 + 5 kg · 休息 90 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 4 & 5：超级组组合 -->
+        <div style="background:linear-gradient(90deg, var(--primary-tint) 0%, transparent 100%);padding:10px 16px 6px;border-left:3px solid var(--primary)">
+          <div class="row">
+            <span class="badge round" style="background:var(--primary);color:#fff;font-size:10px;font-weight:700;padding:2px 7px">⚡ 孤立超级组</span>
+            <span class="t12 sec" style="margin-left:8px">组间无间歇交替做</span>
+            <span class="t12 pri bold" style="margin-left:auto;cursor:pointer">解除绑定</span>
+          </div>
+        </div>
+
+        <div class="ex-edit-row" style="padding-top:8px">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">仰卧臂屈伸</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">固定重量</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 组 × 15 次 · 7.5 kg / 只 · 休息 0 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">Y字侧平举</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">固定重量</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 组 × 20 次 · 2.5 kg / 只 · 休息 60 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- D2 拉日动作列表 -->
+    <div class="px16 day-panel" id="panel-d2" style="display:none">
+      <div class="s-card p0">
+        <!-- 动作 1 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">单手高位下拉</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">滑轮/只</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 组 × 15 次 · 32.5 kg / 只 · 休息 60 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 2 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">对握高位下拉</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:var(--primary-soft);color:var(--primary)">线性 +2.5kg</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">4 组 × 10 次 · 62.5 kg · 休息 120 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 3 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">单手哑铃划船</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">哑铃/只</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 组 × 15 次 · 25 kg / 只 · 休息 90 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 4 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">坐姿开肘划船</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">固定重量</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 组 × 15 次 · 32.5 kg · 休息 60 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 5 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">钢线正握弯举</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">固定重量</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 组 × 15 次 · 7.5 kg · 休息 60 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- D3 腿日动作列表 -->
+    <div class="px16 day-panel" id="panel-d3" style="display:none">
+      <div class="s-card p0">
+        <!-- 动作 1 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">颈前深蹲</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:var(--primary-soft);color:var(--primary)">线性 +2.5kg</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">5 组 × 5 次 · 55 kg · 休息 150 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 2 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">罗马尼亚硬拉</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:var(--primary-soft);color:var(--primary)">线性 +2.5kg</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">4 组 × 8-10 次 · 70 kg · 休息 120 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 3 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">单腿哑铃硬拉</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">哑铃/只</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 组 × 15 次 · 20 kg / 只 · 休息 90 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 4 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">保加利亚分腿蹲</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">哑铃/只</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">4 组 × 10-12 次 · 20 kg / 只 · 休息 90 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+
+        <!-- 动作 5 -->
+        <div class="ex-edit-row">
+          <span class="drag">⋮⋮</span>
+          <div class="col grow">
+            <div class="row">
+              <span class="t15 semi">山羊挺身</span>
+              <span class="badge round" style="font-size:10px;padding:2px 7px;margin-left:6px;background:#f3f4f9;color:var(--text-secondary)">自重+配重</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 组 × 15 次 · 自重 + 20 kg · 休息 60 秒</span>
+          </div>
+          <a class="t13 pri bold" href="exercise-edit.html" style="text-decoration:none">编辑</a>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 新增动作 -->
+    <div class="px16">
+      <a class="add-ex-btn" href="exercise-edit.html" style="display:block;text-align:center;text-decoration:none">+ 新增动作</a>
+    </div>
+    <div class="sp12"></div>
+
+    <div class="row px16" style="justify-content:center">
+      <span class="t12 faint" style="cursor:pointer" onclick="alert('已恢复为官方经典 5 动作标准配置')">↺ 恢复为官方经典 5 动作模板</span>
+    </div>
+    <div class="sp14"></div>
+
+    <div class="row px16">
+      <span style="font-size:12px" class="faint">长按 ⋮⋮ 可拖动排序 · 左滑动作可删除</span>
+    </div>
+    <div style="height:96px"></div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+
+<script>
+  function switchDay(day) {
+    document.querySelectorAll('.plan-tabs .pt').forEach(function(t, i) {
+      if (i === day - 1) t.classList.add('on');
+      else t.classList.remove('on');
+    });
+    document.querySelectorAll('.day-panel').forEach(function(p, i) {
+      p.style.display = (i === day - 1) ? 'block' : 'none';
+    });
+    var link = document.getElementById('blueprintLink');
+    if (day === 1) {
+      link.href = 'day-push.html';
+      link.innerText = '📖 查看 D1 推日设计逻辑 ›';
+    } else if (day === 2) {
+      link.href = 'day-pull.html';
+      link.innerText = '📖 查看 D2 拉日设计逻辑 ›';
+    } else {
+      link.href = 'day-legs.html';
+      link.innerText = '📖 查看 D3 腿日设计逻辑 ›';
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var dayParam = parseInt(urlParams.get('day') || '1');
+    if (dayParam >= 1 && dayParam <= 3) switchDay(dayParam);
+  });
+</script>
+</body>
+</html>

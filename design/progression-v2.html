@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>周期递进 v2 · 实际 vs 建议</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<!--
+  递进页优化版。原版把 8 次训练画成 4 张周卡，占满一屏还看不到全貌，
+  而且表里全是「建议值」—— 一条永远向上的 +2.5 阶梯。
+
+  真实训练不长这样。8 次里能次次 +2.5 的只有刚开始的人，
+  练过几年的第 4、5 次就会卡住。所以这一屏要回答的问题变成三个：
+    1. 这个周期我实际走到哪了（而不是理论上该走到哪）
+    2. 卡住了吗
+    3. 卡住了下一步做什么
+
+  改动：
+  - 8 次压成一条柱状带，高度=重量、颜色=状态，一眼看趋势
+  - 每一格显示实际值，没跟上建议的标橙，不粉饰
+  - 新增停滞检测：连续两次同重量同次数就给三个出口
+  - 新增「重测 1RM」的触发条件说明 —— 原版只有一个入口，没说什么时候该点
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <div class="screen">
+    <div style="padding-top:90px">
+      <div class="row" style="padding:10px 100px 8px 16px">
+        <span style="font-size:19px;color:var(--text-secondary);cursor:pointer">‹</span>
+        <div style="width:14px"></div>
+        <span class="t15 sec">周期递进</span>
+      </div>
+    </div>
+
+    <div class="px16">
+      <div class="t13 semi pri">腿日 · 动作 4 / 5</div>
+      <div class="sp6"></div>
+      <div class="form-title">罗马尼亚硬拉</div>
+      <div class="sp8"></div>
+      <div class="t13 sec">4 组 × 10 次 · RPE 8 · 线性递进</div>
+      <div class="sp18"></div>
+    </div>
+
+    <!--
+      周期总览。柱高按重量归一化（70 → 87.5 映射到 40% → 100%），
+      颜色分四态：绿=按建议完成、橙=低于建议、主色=今天、灰=未开始。
+      第 5、6 次是橙的 —— 这才是真实的 8 周，不是一条直线。
+    -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <div class="col grow">
+            <span class="t15 semi">本周期 8 次</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">第 6 次 · 还剩 2 次</span>
+          </div>
+          <span class="badge">进行中</span>
+        </div>
+        <div class="sp16"></div>
+        <div class="cyc">
+          <div class="b done" style="height:46%"></div>
+          <div class="b done" style="height:55%"></div>
+          <div class="b done" style="height:64%"></div>
+          <div class="b done" style="height:73%"></div>
+          <!-- 第 5 次没加上去，实际还是 77.5，建议是 80 -->
+          <div class="b miss" style="height:73%"></div>
+          <div class="b now" style="height:73%"></div>
+          <div class="b" style="height:91%"></div>
+          <div class="b" style="height:100%"></div>
+        </div>
+        <div class="cyc-axis">
+          <span>70</span><span>72.5</span><span>75</span><span>77.5</span>
+          <span>77.5</span><span>今天</span><span>85</span><span>87.5</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="sp12"></div>
+        <div class="cyc-key">
+          <span><i style="background:var(--green)"></i>按建议完成</span>
+          <span><i style="background:var(--orange)"></i>低于建议</span>
+          <span><i style="background:var(--primary)"></i>今天</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!--
+      停滞提示。这是 v2 新增，也是最贴近实际训练经验的一块：
+      十年里见过的失败模式，主要不是「不知道加多少」，
+      而是「卡住了还在硬加，然后受伤或放弃」。
+
+      触发条件写死：同一动作连续 2 次训练，重量没涨且次数没涨。
+      三个出口对应三种真实处理方式，不给「再试试」这种废话选项。
+    -->
+    <div class="px16">
+      <div class="stall">
+        <div class="hd">⚠ 连续两次没有进步</div>
+        <div class="bd">
+          第 4 次和第 5 次都是 <b style="color:var(--text-primary)">77.5 kg × 10</b>，RPE 都报了 9。
+          按 RPE 8 的标准，中枢神经负荷已达阈值。硬加大概率变形代偿，请选择科学处理：
+        </div>
+        <div class="opts grid4">
+          <div>减到 72.5<br>重做两次</div>
+          <div>降到 3 组<br>维持强度</div>
+          <div class="highlight">开启 1 周减载<br>(容量降半·蓄力)</div>
+          <div>换动作<br>换新刺激</div>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 逐次明细。已完成的显示实际记录 + RPE，跟建议值并排能看出差距 -->
+    <div class="px16">
+      <div class="s-card p0">
+        <div class="row" style="padding:16px">
+          <span class="t15 semi grow">逐次明细</span>
+          <span class="t13 faint">建议 / 实际</span>
+        </div>
+        <div class="divider"></div>
+
+        <div class="prog-row done">
+          <span class="no">第 1 次</span>
+          <span class="w">70 kg</span>
+          <span class="t13 sec grow">70 × 12</span>
+          <span class="badge round soft">RPE 8</span>
+        </div>
+        <div class="prog-row done">
+          <span class="no">第 2 次</span>
+          <span class="w">72.5 kg</span>
+          <span class="t13 sec grow">72.5 × 11</span>
+          <span class="badge round soft">RPE 8</span>
+        </div>
+        <div class="prog-row done">
+          <span class="no">第 3 次</span>
+          <span class="w">75 kg</span>
+          <span class="t13 sec grow">75 × 10</span>
+          <span class="badge round soft">RPE 8</span>
+        </div>
+        <div class="prog-row done">
+          <span class="no">第 4 次</span>
+          <span class="w">77.5 kg</span>
+          <span class="t13 sec grow">77.5 × 10</span>
+          <span class="badge round soft">RPE 9</span>
+        </div>
+        <!-- 第 5 次建议 80、实际 77.5：差值直接写出来，不藏 -->
+        <div class="prog-row done">
+          <span class="no">第 5 次</span>
+          <span class="w" style="color:var(--orange)">80 kg</span>
+          <span class="t13 grow" style="color:var(--orange)">实际 77.5 × 10</span>
+          <span class="badge round soft">RPE 9</span>
+        </div>
+        <div class="prog-row now">
+          <span class="no">第 6 次</span>
+          <span class="w">72.5 kg</span>
+          <span class="t13 pri grow">今天 · 已按 RPE 调低</span>
+          <span class="badge round soft">建议</span>
+        </div>
+        <div class="prog-row">
+          <span class="no">第 7 次</span><span class="w">75 kg</span>
+          <span class="t13 faint grow">未开始</span>
+        </div>
+        <div class="prog-row">
+          <span class="no">第 8 次</span><span class="w">77.5 kg</span>
+          <span class="t13 faint grow">周期最后一次</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!--
+      重测 1RM 的时机。原版只放了一个「重测 1RM」链接，
+      没告诉用户什么时候该点它 —— 于是永远不点，系数基准一直是三个月前的数。
+      这里给出三个明确触发条件，都是可以从记录里自动判断的。
+    -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="t15 semi">什么时候该重测 1RM</div>
+        <div class="sp12"></div>
+        <div class="rule"><span class="no">1</span><span>周期走完 8 次。这时候主项已经涨了 17.5 kg，旧的 1RM 一定偏低。</span></div>
+        <div class="rule"><span class="no">2</span><span><b>连续两次触发停滞提示</b>。可能不是你卡住了，是基准算错了。</span></div>
+        <div class="rule"><span class="no">3</span><span>停训超过三周。回来别接着原来的重量，按 RPE 8 重新找一次。</span></div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="sp12"></div>
+        <div class="t13 faint">重测不用真的做 1RM。用一组 3–5 次的重量按 Brzycki 反推就够，风险小得多。</div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 现实中断与复训保护 (Disruption & Deload Management) -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="t15 semi grow">✈️ 出差/停训回归与主动减载</span>
+          <span class="badge round soft">现实自适应</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="rule"><span class="no" style="background:#3b82f6;color:#fff">停</span><span><b>停训 1~2 周</b>：开启「复训保护」，按原重量 80%~85% 唤醒肌肉记忆与神经连接。</span></div>
+        <div class="rule"><span class="no" style="background:#3b82f6;color:#fff">休</span><span><b>停训 &gt;3 周</b>：建议重置当前 8 次周期，或通过 3~5 次估测重新校准 1RM。</span></div>
+        <div class="rule"><span class="no" style="background:var(--primary);color:#fff">减</span><span><b>主动开启减载周 (Deload)</b>：关节不适或中枢神经疲劳时，一键开启 1 周容量减半。</span></div>
+        <div class="sp12"></div>
+        <div class="row">
+          <button style="flex:1;padding:8px 4px;font-size:12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);cursor:pointer" onclick="alert('已开启复训保护：本次训练建议重量自动调整为 80%')">✈️ 开启复训保护 (80% 负荷)</button>
+          <div style="width:8px"></div>
+          <button style="flex:1;padding:8px 4px;font-size:12px;border:1px solid var(--primary);color:var(--primary);border-radius:8px;background:var(--primary-tint);cursor:pointer;font-weight:700" onclick="alert('已开启 1 周主动减载 (Deload)：组数减半，重量降至 70%')">🛌 开启主动减载周</button>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 递进类型说明保留，但改成「这个动作为什么这样加」的具体回答 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="t15 semi">这个动作为什么线性加</div>
+        <div class="sp12"></div>
+        <div class="keypoint">罗马尼亚硬拉是主线动作，系数 0.78 挂在传统硬拉 1RM 上，每次 +2.5 kg。</div>
+        <div class="keypoint">同一天的<strong>单腿硬拉、山羊挺身</strong>也挂硬拉 1RM。硬拉那个数填错，这一天三个动作全偏。</div>
+        <div class="keypoint">加不上去不算失败。按上次的重量再练一次，表会跟着实际记录往后推。</div>
+      </div>
+    </div>
+
+    <div style="height:96px"></div>
+  </div>
+
+  <div class="sticky-bar">
+    <div class="divider"></div>
+    <div class="inner"><button class="cta">用 72.5 kg 开始这个动作</button></div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我的 · 个人档案与身体数据</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<!--
+  「我的」页面 · 个人资料与身体数据：
+  1. 个人基础档案：头像、昵称、铁龄、力量水平标签（Wilks/DOTS 力量系数）
+  2. 身体档案指标：身高、当前体重、目标体重、体脂率、骨骼肌量及趋势
+  3. 三大项 1RM 极速总览与推算基准
+  4. 应用配置：主题配色切换、休息振动反馈、数据导出与安全备份
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <div class="screen">
+    <!-- 顶部个人资料卡 -->
+    <div class="px16" style="padding-top:90px">
+      <div class="s-card p18">
+        <div class="profile-avatar-row">
+          <div class="avatar-box">K</div>
+          <div class="col grow">
+            <div class="row">
+              <span style="font-size:20px;font-weight:800">凯文 Kevin</span>
+              <span class="badge round soft" style="margin-left:8px;font-size:11px">高级力量者</span>
+            </div>
+            <div class="sp4"></div>
+            <span class="t13 sec">铁龄 4.5 年 · 凯谭三分化执行中</span>
+          </div>
+          <span class="t13 pri bold" style="cursor:pointer">编辑</span>
+        </div>
+        <div class="sp14"></div>
+        <div class="divider"></div>
+        <div class="sp12"></div>
+        <div class="row">
+          <span class="t12 sec grow" id="dotsSummaryText">力量系数 (DOTS)：<b>312.5 分</b> (进阶水平)</span>
+          <a class="t12 pri bold" href="one-rep-max.html#standards" style="text-decoration:none">查看评级标准 ›</a>
+        </div>
+        <div class="sp10"></div>
+        <div class="row" style="justify-content:space-between;background:var(--input-bg);padding:6px 10px;border-radius:8px">
+          <div class="row gap6">
+            <span class="t12 sec">性别：</span>
+            <span class="badge round" id="btnGenderMale" style="background:var(--primary);color:#fff;font-size:11px;padding:2px 8px;cursor:pointer" onclick="setGender('male')">♂ 男</span>
+            <span class="badge round" id="btnGenderFemale" style="background:#fff;color:var(--text-secondary);border:1px solid var(--border);font-size:11px;padding:2px 8px;cursor:pointer" onclick="setGender('female')">♀ 女</span>
+          </div>
+          <span class="t11 faint" id="genderBarText">标准 20kg 奥林匹克杆</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 身体指标档案 (身高、体重、体脂、肌肉量) -->
+    <div class="px16">
+      <div class="s-card p18">
+        <div class="row">
+          <span class="t15 semi grow">身体档案数据</span>
+          <span class="t13 pri" style="cursor:pointer">更新数据 ›</span>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="body-metrics-grid">
+          <!-- 身高 -->
+          <div class="metric-card">
+            <div class="lbl">身高 Height</div>
+            <div class="val">178<span>cm</span></div>
+            <div class="t11 faint" style="margin-top:2px">BMI 23.8 (正常)</div>
+          </div>
+          <!-- 体重 -->
+          <div class="metric-card">
+            <div class="lbl">当前体重 Weight</div>
+            <div class="val">75.5<span>kg</span></div>
+            <div class="sub-tip">↓ 0.3 kg 本周</div>
+          </div>
+          <!-- 目标体重 -->
+          <div class="metric-card">
+            <div class="lbl">目标体重 Target</div>
+            <div class="val">78.0<span>kg</span></div>
+            <div class="t11 faint" style="margin-top:2px">增肌期 · 还差 2.5kg</div>
+          </div>
+          <!-- 体脂率 -->
+          <div class="metric-card">
+            <div class="lbl">体脂率 Body Fat</div>
+            <div class="val">14.2<span>%</span></div>
+            <div class="sub-tip">骨骼肌 36.8 kg</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 三大项能力基准 -->
+    <div class="px16">
+      <div class="s-card p0">
+        <a class="entry-row" href="one-rep-max.html">
+          <div class="col grow">
+            <span class="t15 semi">三大项 1RM 档案</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">深蹲 90 · 卧推 70 · 硬拉 120 kg (总和 280kg)</span>
+          </div>
+          <span class="t13 pri">重测 / 修改 ›</span>
+        </a>
+        <div class="divider" style="margin:0 16px"></div>
+        <a class="entry-row" href="progression-v2.html">
+          <div class="col grow">
+            <span class="t15 semi">当前周期超负荷进度</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">第 3 / 8 次训练 · 1 项动作达成 PR 突破</span>
+          </div>
+          <span class="t13 pri">查看 ›</span>
+        </a>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 偏好设置与数据管理 -->
+    <div class="px16">
+      <div class="s-card p0">
+        <div class="entry-row" style="cursor:pointer" onclick="var themes=['orange','blue','cyan','emerald','gold','purple']; var idx=(themes.indexOf(localStorage.getItem('app-theme')||'orange')+1)%themes.length; setAppTheme(themes[idx]);">
+          <div class="col grow">
+            <span class="t15 semi">主题配色方案</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">6 种专业运动主题色（点击快速轮换）</span>
+          </div>
+          <span class="t13 pri">切换 ›</span>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+        <div class="entry-row">
+          <div class="col grow">
+            <span class="t15 semi">🎧 耳机穿透提示音</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">组间结束播放低调双重音（不暂停/不打断音乐）</span>
+          </div>
+          <span class="t13 pri bold">已开启</span>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+        <div class="entry-row">
+          <div class="col grow">
+            <span class="t15 semi">📱 训练防误触与屏幕常亮</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">倒计时期间保持常亮 · 揣入口袋感应自动防误触</span>
+          </div>
+          <span class="t13 pri bold">已开启</span>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+        <div class="entry-row" style="cursor:pointer" onclick="alert('已配置杠铃杆规格：\n男用奥林匹克标杆 20kg\n女用细杆 15kg\n\n彩色挂片已对齐国际标准色标：🔴25kg 🔵20kg 🟡15kg 🟢10kg ⚪5kg ⚫2.5kg')">
+          <div class="col grow">
+            <span class="t15 semi">标准杠铃杆与彩色挂片</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">男用 20kg 标杆 / 女用 15kg 细杆 · 国际标准色标</span>
+          </div>
+          <span class="t13 pri">修改 ›</span>
+        </div>
+        <div class="divider" style="margin:0 16px"></div>
+        <div class="entry-row" style="cursor:pointer" onclick="alert('📊 训练数据导出成功！\n已生成 reshape_workout_history_Keivn.csv，包含 34 场训练的全部做组、RPE 与 PR 记录。')">
+          <div class="col grow">
+            <span class="t15 semi">训练数据导出与备份</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">已存储 34 场训练 · 支持导出 CSV 表格</span>
+          </div>
+          <span class="t13 pri">导出 ›</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp18"></div>
+
+    <div class="row px16">
+      <span style="font-size:9px;color:var(--green)">●</span>
+      <span style="width:6px"></span>
+      <span style="font-size:12px" class="faint">个人资料与身体档案均加密存储在本机</span>
+    </div>
+    <div style="height:84px"></div>
+  </div>
+
+  <!-- 底部 Tab 栏 -->
+  <div class="tab-bar">
+    <div class="divider"></div>
+    <div class="tabs">
+      <a class="tab" href="home-v2.html">训练</a>
+      <a class="tab" href="knowledge.html">知识</a>
+      <a class="tab" href="history-calendar.html">记录</a>
+      <div class="tab on">我的</div>
+    </div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+
+<script>
+  function setGender(g) {
+    var btnM = document.getElementById('btnGenderMale');
+    var btnF = document.getElementById('btnGenderFemale');
+    var dotsText = document.getElementById('dotsSummaryText');
+    var barText = document.getElementById('genderBarText');
+    if (g === 'male') {
+      btnM.style.background = 'var(--primary)';
+      btnM.style.color = '#fff';
+      btnM.style.border = 'none';
+      btnF.style.background = '#fff';
+      btnF.style.color = 'var(--text-secondary)';
+      btnF.style.border = '1px solid var(--border)';
+      if (dotsText) dotsText.innerHTML = '力量系数 (DOTS)：<b>312.5 分</b> (进阶水平)';
+      if (barText) barText.innerText = '标准 20kg 奥林匹克杆';
+    } else {
+      btnF.style.background = 'var(--primary)';
+      btnF.style.color = '#fff';
+      btnF.style.border = 'none';
+      btnM.style.background = '#fff';
+      btnM.style.color = 'var(--text-secondary)';
+      btnM.style.border = '1px solid var(--border)';
+      if (dotsText) dotsText.innerHTML = '力量系数 (DOTS)：<b>358.4 分</b> (精英水平)';
+      if (barText) barText.innerText = '标准 15kg 女性细杆';
+    }
+  }
+</script>
+</body>
+</html>

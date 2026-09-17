@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本次全部动作 · AllExercisesSheet</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <!-- 抽屉背后仍是记录页，这里只留顶部一截，说明层级关系 -->
+  <div class="screen">
+    <div style="padding-top:90px">
+      <div class="row" style="padding:10px 100px 8px 16px">
+        <span style="font-size:19px;color:var(--text-secondary)">✕</span>
+        <div style="width:14px"></div>
+        <span class="t15 pri">结束并记录</span>
+      </div>
+      <div class="t13 sec" style="text-align:center;padding-right:100px">已完成 5 / 17 组位（含热身）</div>
+      <div class="sp10"></div>
+      <div class="px16"><div class="thin-progress"><i style="width:29.4%"></i></div></div>
+      <div class="sp16"></div>
+    </div>
+    <div class="px16">
+      <div class="t13 semi pri">动作 2 / 5 · 第 2 组</div>
+      <div class="sp6"></div>
+      <div class="record-title">单腿保加利亚蹲</div>
+      <div class="sp6"></div>
+      <div class="t13 sec">本组目标：10–12 次 · RPE 8 · 建议休息 120 秒</div>
+    </div>
+  </div>
+
+  <div class="scrim"></div>
+
+  <!-- ModalBottomSheet(visible = true)，高度固定 600 -->
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+
+    <div class="row" style="padding:18px 20px 0">
+      <div class="col grow">
+        <div class="sheet-title">本次全部动作</div>
+        <div class="sp4"></div>
+        <div class="t13 faint">点击已记录的组可修改</div>
+      </div>
+      <span class="t15 sec" style="cursor:pointer">收起</span>
+    </div>
+
+    <div class="sp14"></div>
+
+    <div class="sheet-list">
+      <!-- 01 已完成：4 组全部记录 -->
+      <div class="ex-row">
+        <div class="row">
+          <span class="ex-index">01</span>
+          <span class="ex-name">单腿硬拉</span>
+          <span class="badge round green">已完成 4 组</span>
+        </div>
+        <!--
+          列表里也给建议重量：决定「下一个做什么」的时候顺手看到要上多少，
+          不用点进每个动作再退回来。硬拉 1RM 120 × 0.22 → 12 次 @70% → 17.5 单手。
+        -->
+        <div class="sp6"></div>
+        <div class="row-sug">建议 17.5 单手 · 12 次</div>
+        <div class="sp12"></div>
+        <div class="row gap10">
+          <div class="set-chip logged">1</div>
+          <div class="set-chip logged">2</div>
+          <div class="set-chip logged">3</div>
+          <div class="set-chip logged">4</div>
+        </div>
+      </div>
+
+      <!-- 02 训练中：第 1 组已记录，光标停在第 2 组 -->
+      <div class="ex-row current">
+        <div class="row">
+          <span class="ex-index">02</span>
+          <span class="ex-name">单腿保加利亚蹲</span>
+          <span class="badge round">训练中 1 / 4 组</span>
+        </div>
+        <!--
+          深蹲 1RM 90 × 0.28 → 10 次 @75% → 20 单手，是这个动作的起点。
+          半递进动作有记录之后建议值跟着上次走，所以这里跟记录页预填的 22.5 一致。
+        -->
+        <div class="sp6"></div>
+        <div class="row-sug">建议 22.5 单手 · 10–12 次</div>
+        <div class="sp12"></div>
+        <div class="row gap10">
+          <div class="set-chip logged">1</div>
+          <div class="set-chip current">2</div>
+          <div class="set-chip">3</div>
+          <div class="set-chip">4</div>
+        </div>
+      </div>
+
+      <!-- 03 待完成 -->
+      <div class="ex-row">
+        <div class="row">
+          <span class="ex-index">03</span>
+          <span class="ex-name">高脚杯深蹲</span>
+          <span class="badge round sec">待完成 3 组</span>
+        </div>
+        <!--
+          这个动作不在映射表里，给不出建议值。这里明确写出来，
+          而不是显示 0 或者留空 —— 否则用户会以为算错了。
+        -->
+        <div class="sp6"></div>
+        <div class="no-sug">未关联主项 · 按计划起始重量 24 kg</div>
+        <div class="sp12"></div>
+        <div class="row gap10">
+          <div class="set-chip">1</div>
+          <div class="set-chip">2</div>
+          <div class="set-chip">3</div>
+        </div>
+      </div>
+
+      <!-- 04 待完成 -->
+      <div class="ex-row">
+        <div class="row">
+          <span class="ex-index">04</span>
+          <span class="ex-name">杠铃罗马尼亚硬拉</span>
+          <span class="badge round sec">待完成 3 组</span>
+        </div>
+        <!-- 线性递进的主项：基准 70 + 2.5 × 2（本周期第 3 次）= 75 -->
+        <div class="sp6"></div>
+        <div class="row-sug">建议 75 kg · 本周期第 3 次</div>
+        <div class="sp12"></div>
+        <div class="row gap10">
+          <div class="set-chip">1</div>
+          <div class="set-chip">2</div>
+          <div class="set-chip">3</div>
+        </div>
+      </div>
+
+      <!-- 05 已跳过：名字置灰，组号仍可点，允许改主意 -->
+      <div class="ex-row">
+        <div class="row">
+          <span class="ex-index">05</span>
+          <span class="ex-name off">山羊挺身</span>
+          <span class="badge round sec">已跳过</span>
+        </div>
+        <!-- 硬拉 1RM 120 × 0.25 → 15 次 @65% → 20 kg 负重，自重做也行 -->
+        <div class="sp6"></div>
+        <div class="row-sug">建议负重 20 kg · 自重也可以</div>
+        <div class="sp12"></div>
+        <div class="row gap10">
+          <div class="set-chip">1</div>
+          <div class="set-chip">2</div>
+          <div class="set-chip">3</div>
+        </div>
+      </div>
+
+      <!--
+        新建自定义动作的入口。跳转至统一动作配置页 (exercise-edit.html)
+      -->
+      <a class="add-ex-row" href="exercise-edit.html" style="display:block;text-decoration:none">＋ 新建自定义动作</a>
+
+      <div class="sp16"></div>
+    </div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+</body>
+</html>

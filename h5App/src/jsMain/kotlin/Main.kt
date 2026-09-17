@@ -13,8 +13,8 @@ fun main() {
     val webSign = "is_web"
     // Process URL parameters
     val urlParams = URL.parseParams(window.location.href)
-    // Page name, default is router
-    val pageName = urlParams["page_name"] ?: "router"
+    // Page name, default is home
+    val pageName = urlParams["page_name"] ?: "home"
     // Container size
     val containerWidth = window.innerWidth
     val containerHeight = window.innerHeight

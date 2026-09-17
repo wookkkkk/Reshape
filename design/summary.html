@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本次完成 · SessionSummaryPage</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <div class="screen">
+    <!-- 顶部留白 = 状态栏 44 + 46 -->
+    <div class="px16" style="padding-top:90px">
+      <div class="t14 pri bold">本次训练已记录</div>
+      <div class="sp8"></div>
+      <div class="record-title">腿日完成了</div>
+      <div class="sp8"></div>
+      <div class="t13 sec">训练数据已保存在本机，随时可回顾。</div>
+      <div class="sp18"></div>
+    </div>
+
+    <!-- 顶部三项核心指标：完成组数 / 总容量 / 训练时长 -->
+    <div class="px16">
+      <div class="s-card p18">
+        <div class="row top">
+          <div class="stat-cell">
+            <div class="t13 sec">完成组数</div>
+            <div class="sp8"></div>
+            <div class="row bottom">
+              <span class="stat-value">13</span>
+              <span class="stat-unit">/ 14 正式组</span>
+            </div>
+          </div>
+          <div class="stat-cell">
+            <div class="t13 sec">总容量</div>
+            <div class="sp8"></div>
+            <div class="row bottom">
+              <span class="stat-value">5130</span>
+              <span class="stat-unit">kg</span>
+            </div>
+          </div>
+          <div class="stat-cell">
+            <div class="t13 sec">训练时长</div>
+            <div class="sp8"></div>
+            <div class="row bottom">
+              <span class="stat-value">58</span>
+              <span class="stat-unit">分钟</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 今日超负荷高光卡片 (Overload PRs) -->
+    <div class="px16">
+      <div class="s-card" style="background: linear-gradient(135deg, #fafbfe 0%, #f0f2fb 100%); border: 1px solid rgba(91,95,199,0.16)">
+        <div class="row">
+          <span class="t14 bold pri grow">🏆 今日超负荷突破</span>
+          <span class="badge round soft">2 项达成</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="row" style="font-size:13px; line-height: 1.6; color: var(--text-primary)">
+          <span>🚀 <b>保加利亚分腿蹲</b> 第 2 组 22.5kg × 11 次（比上次多做 1 次）</span>
+        </div>
+        <div class="sp6"></div>
+        <div class="row" style="font-size:13px; line-height: 1.6; color: var(--text-primary)">
+          <span>🔥 <b>罗马尼亚硬拉</b> 70kg (+2.5kg PR 突破)</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 老铁极简硬核战报卡片 (Workout Story Card) -->
+    <div class="px16">
+      <div class="story-card">
+        <div class="story-hd">
+          <div>
+            <div class="story-logo">RESHAPE <span>LIFT</span></div>
+            <div class="story-date" style="margin-top:4px">Day 3 腿日 · 2026.08.24</div>
+          </div>
+          <span class="badge round" style="background:rgba(255,255,255,0.15);color:#fff;font-size:11px;padding:3px 8px">第 3/8 次循环</span>
+        </div>
+
+        <div class="story-stats">
+          <div>
+            <div class="story-stat-v">58<span style="font-size:12px;font-weight:normal"> min</span></div>
+            <div class="story-stat-k">训练时长</div>
+          </div>
+          <div>
+            <div class="story-stat-v">5.13<span style="font-size:12px;font-weight:normal"> t</span></div>
+            <div class="story-stat-k">有效总容量</div>
+          </div>
+          <div>
+            <div class="story-stat-v">13<span style="font-size:12px;font-weight:normal"> 组</span></div>
+            <div class="story-stat-k">正式工作组</div>
+          </div>
+        </div>
+
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:8px">🔥 突破记录</div>
+        <div class="story-pr-row">
+          <span>🚀 保加利亚分腿蹲</span>
+          <span style="margin-left:auto;font-weight:700;color:var(--primary)">22.5 kg × 11 次</span>
+        </div>
+        <div class="story-pr-row">
+          <span>🔥 罗马尼亚硬拉</span>
+          <span style="margin-left:auto;font-weight:700;color:var(--primary)">70.0 kg × 8 次</span>
+        </div>
+
+        <div class="sp12"></div>
+        <div class="row" style="gap:8px">
+          <button style="flex:1;background:var(--primary);color:#fff;border:0;border-radius:10px;padding:9px 0;font-size:13px;font-weight:700;cursor:pointer">📸 保存高清长图</button>
+          <button style="flex:1;background:rgba(255,255,255,0.1);color:#fff;border:0;border-radius:10px;padding:9px 0;font-size:13px;font-weight:700;cursor:pointer">📋 复制文本战报</button>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 🤖 AI 资深教练战报深度诊断 (Phase 2 展示预留位) -->
+    <div class="px16">
+      <div class="s-card" style="background:linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);border:1px solid #bbf7d0">
+        <div class="row">
+          <div class="row">
+            <span style="font-size:18px">🤖</span>
+            <span class="t14 bold" style="color:#166534;margin-left:6px">AI 力量教练 · 本期展示预留</span>
+          </div>
+          <span class="badge round" style="background:#16a34a;color:#fff;font-size:10px;font-weight:700;padding:2px 6px;margin-left:auto">即将上线</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="t12" style="color:#15803d;line-height:1.5">
+          这里预留第二阶段 AI 深度战报入口。本期仅展示未来能力方向，不进入真实模型调用与会员次数消耗。
+        </div>
+        <div class="sp10"></div>
+        <div class="row" style="justify-content:space-between">
+          <span class="t11" style="color:#15803d">Phase 2 预留卡位</span>
+          <span class="t11 bold" style="color:#166534">本期不触发</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp14"></div>
+
+    <!-- 01 颈前深蹲 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-index">01</span>
+          <span class="ex-name">颈前深蹲</span>
+          <span class="badge round soft">3 / 3 正式组</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="log-row">
+          <span class="no">第 1 组</span><span class="val">40 kg × 15</span>
+          <span class="t13 faint">热身</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 2 组</span><span class="val">45 kg × 12</span>
+          <span class="t13 faint">热身</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 3 组</span><span class="val">50 kg × 10</span>
+          <span class="t13 sec">RPE 8</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 4 组</span><span class="val">55 kg × 8</span>
+          <span class="t13 sec">RPE 8</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 5 组</span><span class="val">55 kg × 8</span>
+          <span class="t13 sec">RPE 9</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 02 罗马尼亚硬拉 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-index">02</span>
+          <span class="ex-name">罗马尼亚硬拉</span>
+          <span class="badge round soft">3 / 3 正式组</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="log-row">
+          <span class="no">第 1 组</span><span class="val">60 kg × 10</span>
+          <span class="t13 faint">热身</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 2 组</span><span class="val">65 kg × 8</span>
+          <span class="t13 sec">RPE 8</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 3 组</span><span class="val">70 kg × 8</span>
+          <span class="t13 pri bold">RPE 8 · +2.5kg PR</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 4 组</span><span class="val">70 kg × 8</span>
+          <span class="t13 sec">RPE 9.5</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 03 单腿硬拉 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-index">03</span>
+          <span class="ex-name">单腿硬拉</span>
+          <span class="badge round soft">3 / 3 正式组</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="log-row">
+          <span class="no">第 1 组</span><span class="val">20 kg × 12 / 只</span>
+          <span class="t13 sec">RPE 7</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 2 组</span><span class="val">20 kg × 10 / 只</span>
+          <span class="t13 sec">RPE 8</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 3 组</span><span class="val">20 kg × 10 / 只</span>
+          <span class="t13 sec">RPE 8</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 04 保加利亚分腿蹲 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-index">04</span>
+          <span class="ex-name">保加利亚分腿蹲</span>
+          <span class="badge round soft">4 / 4 正式组</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="log-row">
+          <span class="no">第 1 组</span><span class="val">20 kg × 12 / 只</span>
+          <span class="t13 sec">RPE 7</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 2 组</span><span class="val">22.5 kg × 11 / 只</span>
+          <span class="t13 pri bold">RPE 8 · +1次突破</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 3 组</span><span class="val">22.5 kg × 10 / 只</span>
+          <span class="t13 sec">RPE 8</span>
+        </div>
+        <div class="log-row">
+          <span class="no">第 4 组</span><span class="val">22.5 kg × 10 / 只</span>
+          <span class="t13 sec">RPE 9</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 05 山羊挺身：跳过了，照实显示 -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-index">05</span>
+          <span class="ex-name off">山羊挺身</span>
+          <span class="badge round blank">未记录</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 给吸底按钮区让位 -->
+    <div style="height:128px"></div>
+  </div>
+
+  <div class="sticky-bar">
+    <div class="divider"></div>
+    <div class="inner">
+      <a class="cta" href="home-v2.html">完成并返回首页</a>
+    </div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+
+</body>
+</html>

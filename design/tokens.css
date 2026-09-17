@@ -1,0 +1,427 @@
+/*
+ * 设计稿共享样式
+ *
+ * 取值全部来自 shared/.../session 下的 Kotlin 代码，dp / sp 按 1:1 映射成 px：
+ *   颜色         SessionTheme.kt 的 object S
+ *   组件尺寸     SessionTheme.kt 的 SCard / CtaButton / StepButton ...
+ *   间距         各 Page.kt 里的 Spacer / padding
+ * 改这里之前先确认 Kotlin 侧的值，避免设计稿和实现对不上。
+ */
+
+:root {
+  /* ---- 布局常量 ---- */
+  --status-bar: 44px;
+  --capsule-height: 46px;
+  --capsule-reserve: 100px;
+
+  /* ---- 基础配色 ---- */
+  --bg: #f0f1f7;
+  --card: #ffffff;
+  --divider: #edeef4;
+
+  --text-primary: #1e2033;
+  --text-secondary: #6a6d82;
+  --text-faint: #9a9cae;
+
+  --orange: #ff5722;
+  --green: #3ea97a;
+  --cta-disabled: #c7c9de;
+
+  /* ---- 默认主题色：活力力量橙 (Flame Orange) ---- */
+  --primary: #ff5722;
+  --primary-deep: #e64a19;
+  --primary-soft: #ffebe5;
+  --primary-tint: #fff6f3;
+}
+
+/* 1. 活力力量橙 (Flame Orange - 泵感与力量) */
+:root[data-theme="orange"] {
+  --primary: #ff5722;
+  --primary-deep: #e64a19;
+  --primary-soft: #ffebe5;
+  --primary-tint: #fff6f3;
+}
+
+/* 2. 专业深海曜蓝 (Cobalt Blue - 严谨硬核) */
+:root[data-theme="blue"] {
+  --primary: #2563eb;
+  --primary-deep: #1d4ed8;
+  --primary-soft: #eff6ff;
+  --primary-tint: #f8faff;
+}
+
+/* 3. 极光电青蓝 (Electric Cyan - 运动科技感) */
+:root[data-theme="cyan"] {
+  --primary: #0284c7;
+  --primary-deep: #0369a1;
+  --primary-soft: #e0f2fe;
+  --primary-tint: #f0f9ff;
+}
+
+/* 4. 翡翠高能绿 (Emerald Green - 爆发力与健康) */
+:root[data-theme="emerald"] {
+  --primary: #059669;
+  --primary-deep: #047857;
+  --primary-soft: #d1fae5;
+  --primary-tint: #ecfdf5;
+}
+
+/* 5. 黑曜琥珀金 (Amber Gold - 黑金低调力量) */
+:root[data-theme="gold"] {
+  --primary: #d97706;
+  --primary-deep: #b45309;
+  --primary-soft: #fef3c7;
+  --primary-tint: #fffbeb;
+}
+
+/* 6. 经典紫罗兰 (Classic Violet - 原版经典) */
+:root[data-theme="purple"] {
+  --primary: #5b5fc7;
+  --primary-deep: #3f43a8;
+  --primary-soft: #e9eaf7;
+  --primary-tint: #f5f5fc;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: var(--text-primary);
+}
+
+/* ============ 手机外壳 ============ */
+/* 390 x 844 对应 iPhone 14 的逻辑分辨率 */
+.phone {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* 可滚动的页面主体，对应 LazyColumn */
+.screen {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.screen::-webkit-scrollbar {
+  width: 0;
+}
+
+/* ---- 系统状态栏（示意，非应用内容） ---- */
+.status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  height: var(--status-bar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  pointer-events: none;
+}
+
+.status-bar .icons {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+/* ---- 小程序胶囊（示意，由宿主绘制） ---- */
+/* 顶栏留白就是为了不被它压住，所以设计稿里必须画出来 */
+.capsule {
+  position: absolute;
+  top: 52px;
+  right: 12px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(6px);
+  color: #3a3d4d;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.capsule .sep {
+  width: 1px;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.14);
+}
+
+/* ---- home 指示条 ---- */
+.home-bar {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 41;
+  width: 134px;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(30, 32, 51, 0.28);
+  pointer-events: none;
+}
+
+/* ============ 通用组件 ============ */
+
+/* SCard —— 白色圆角卡片，默认 16 内边距 */
+.s-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.s-card.p18 {
+  padding: 18px;
+}
+
+/* padding = 0 的卡片，分区自己带内边距 */
+.s-card.p0 {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* SDivider */
+.divider {
+  height: 1px;
+  background: var(--divider);
+}
+
+/* CtaButton */
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px 0;
+  border: 0;
+  border-radius: 26px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.cta.disabled {
+  background: var(--cta-disabled);
+  cursor: default;
+}
+
+/* OutlineButton —— 底色 8% 透明度 + 28% 描边 */
+.outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 12px 0;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.outline.primary {
+  background: var(--primary-soft);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.outline.orange {
+  background: rgba(221, 110, 60, 0.08);
+  border: 1px solid rgba(221, 110, 60, 0.28);
+  color: var(--orange);
+}
+
+/* StepButton —— 46 圆形步进按钮 */
+.step-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 23px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 22px;
+  font-family: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* disabled 时降低对比但保留占位 */
+.step-btn.off {
+  background: rgba(233, 234, 247, 0.5);
+  color: var(--text-faint);
+  cursor: default;
+}
+
+/* ValueStepper */
+.stepper-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.stepper-hint {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--primary);
+}
+
+.stepper-row {
+  display: flex;
+  align-items: center;
+}
+
+.stepper-value {
+  flex: 1;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--primary-deep);
+}
+
+/* ChoiceChip */
+.chip {
+  flex: 1;
+  padding: 13px 0;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: var(--text-primary);
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.chip.on {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ThinProgress —— 3 高细长进度条 */
+.thin-progress {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--primary-soft);
+  overflow: hidden;
+}
+
+.thin-progress > i {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+
+/* 小徽标，如「今日推荐」/ 组数状态 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 8px;
+  background: var(--primary-soft);
+  padding: 4px 9px;
+  color: var(--primary);
+  font-size: 11px;
+}
+
+.badge.round {
+  border-radius: 11px;
+  padding: 6px 11px;
+  font-size: 12px;
+  background: #fff;
+}
+
+/* ============ 吸底行动区 ============ */
+/*
+ * 白底 + 顶部分隔线，跟滚动内容分层，
+ * 否则最后一行按钮看着像被裁掉而不是滚到了栏下面。
+ */
+.sticky-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  background: var(--card);
+}
+
+.sticky-bar .inner {
+  /* bottom 24 给 home 指示条留位，对应 CTA_BAR_BOTTOM */
+  padding: 14px 16px 24px;
+}
+
+/* ============ 排版工具 ============ */
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.row.top {
+  align-items: flex-start;
+}
+
+.row.bottom {
+  align-items: flex-end;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.px16 {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.gap10 {
+  gap: 10px;
+}
+
+.gap8 {
+  gap: 8px;
+}
+
+.gap12 {
+  gap: 12px;
+}
+
+/* 字号 / 颜色 */
+.t13 { font-size: 13px; }
+.t14 { font-size: 14px; }
+.t15 { font-size: 15px; }
+.sec { color: var(--text-secondary); }
+.faint { color: var(--text-faint); }
+.pri { color: var(--primary); }
+.semi { font-weight: 600; }
+.bold { font-weight: 700; }
