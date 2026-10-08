@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>今日训练首页 · 优化版</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<!--
+  首页优化版（十年老铁特化）：
+  1. 循环位置语义：D1/D2/D3 + 8次周期进度指示
+  2. 灵活调度：支持「今天休息（插入恢复日）」与「调换部位」，顺应生理状态
+  3. 出门前装备清单：智能提醒护膝、腰带、拉力带，出门不遗漏
+  4. 肌群超量恢复雷达：科学指引各部位恢复状态，辅助决定训练强度
+  5. 1RM 周期失效提醒与直通编排/原则
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">▮▮▮ ⌁ ▰</span>
+  </div>
+  <div class="capsule">··· <span class="sep"></span> ⊙</div>
+
+  <div class="screen">
+    <div class="row px16" style="padding-top:90px">
+      <div class="col grow">
+        <div class="t14 sec">你的训练计划</div>
+        <div class="sp6"></div>
+        <div class="row">
+          <span style="font-size:27px;font-weight:700">凯谭三分化</span>
+          <a class="t13 pri bold" href="plan.html" style="margin-left:10px;text-decoration:none">📖 计划大纲 ›</a>
+        </div>
+      </div>
+      <a class="pill" href="profile.html" style="text-decoration:none">我</a>
+    </div>
+    <div class="sp16"></div>
+
+    <!-- 循环位置与调度操作（点击直达单日详解） -->
+    <div class="px16">
+      <div class="row" style="margin-bottom:8px">
+        <span class="t13 semi sec grow">当前循环位置</span>
+        <span class="t12 pri bold" style="cursor:pointer;margin-right:12px" onclick="handleInsertRestDay()">🛌 今天休息</span>
+        <span class="t12 sec" style="cursor:pointer" onclick="handleSwapBodyPart()">⇄ 换部位</span>
+      </div>
+      <div class="day-strip" id="homeDayStrip">
+        <a class="d done" href="day-push.html" style="text-decoration:none;display:block"><div class="k">D1 推</div><div class="v">已完成 ›</div></a>
+        <a class="d done" href="day-pull.html" style="text-decoration:none;display:block"><div class="k">D2 拉</div><div class="v">已完成 ›</div></a>
+        <a class="d today" href="day-legs.html" style="text-decoration:none;display:block"><div class="k">D3 腿</div><div class="v">今天 ›</div></a>
+      </div>
+      <div class="sp8"></div>
+      <div class="row" style="justify-content:center">
+        <span class="t12 faint" id="cycleStatusText">本周期第 3 / 8 次 · 距重测 1RM 还剩 5 次</span>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 现实自适应：今日状态与就绪度 -->
+    <div class="px16">
+      <div class="readiness-strip">
+        <button class="readiness-btn on" id="btn-ready-normal" onclick="setReadiness('normal')">
+          <span>⚡ 状态充沛</span>
+          <span style="font-size:10px;opacity:0.7">标准负荷</span>
+        </button>
+        <button class="readiness-btn tired" id="btn-ready-tired" onclick="setReadiness('tired')">
+          <span>🔋 状态疲劳</span>
+          <span style="font-size:10px;opacity:0.8">降重 10% 练容量</span>
+        </button>
+      </div>
+    </div>
+    <div class="sp10"></div>
+
+    <!-- 现实自适应：出差 / 停训复训保护横幅 -->
+    <div class="px16" id="returnShieldSection">
+      <div class="return-shield-banner">
+        <div class="row">
+          <span style="font-size:16px">✈️</span>
+          <div class="col grow" style="margin-left:8px">
+            <div class="title">出差 / 停训回归？</div>
+            <div class="desc">已停训 &gt;7 天时建议开启「复训保护」，按 80% 重量渐进唤醒，避免 DOMS 与拉伤。</div>
+          </div>
+          <span class="t12 pri bold" id="btnReturnShield" style="cursor:pointer;white-space:nowrap;padding:4px 8px;background:#fff;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,0.05)" onclick="handleToggleReturnShield()">开启 ›</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp14"></div>
+
+    <!--
+      今日训练卡。显示今天要练的动作列表 + 预估时长 + 装备清单，
+      出门前扫一眼就知道要占哪些器械、带不带腰带。
+    -->
+    <div class="px16">
+      <div class="s-card p18">
+        <div class="row">
+          <div class="t13 semi pri grow">Day 3 · 腿日</div>
+          <div class="badge">今日训练</div>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row">
+          <span class="t13 sec grow">颈前深蹲 · 3 正式组</span>
+          <span class="t13 faint">55 kg</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="row">
+          <span class="t13 sec grow">罗马尼亚硬拉 · 3 正式组</span>
+          <span class="t13 faint">70 kg</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="row">
+          <span class="t13 sec grow">单腿硬拉 · 3 正式组</span>
+          <span class="t13 faint">20 kg / 只</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="row">
+          <span class="t13 sec grow">保加利亚分腿蹲 · 4 正式组</span>
+          <span class="t13 faint">20 kg / 只</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="row">
+          <span class="t13 sec grow">山羊挺身 · 1 正式组</span>
+          <span class="t13 faint">20 kg</span>
+        </div>
+        <div class="sp12"></div>
+
+        <!-- 出门前装备建议清单 -->
+        <div class="gear-box">
+          <span>💡</span>
+          <span><b>装备建议：</b>硬举腰带 · 7mm 护膝 · 平底深蹲鞋</span>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row">
+          <span class="t13 sec grow">共 14 正式组 · 预计 58 分钟</span>
+          <a class="t13 pri bold" href="plan-edit.html" style="text-decoration:none">编辑计划 ›</a>
+        </div>
+        <div class="sp16"></div>
+        <a class="cta" href="record-v2.html">开始腿日训练</a>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 肌群超量恢复雷达卡片 -->
+    <div class="px16">
+      <div class="s-card p18">
+        <div class="row">
+          <span class="t14 bold grow">⚡ 肌群超量恢复状态</span>
+          <a class="t12 pri bold" href="principles.html#recovery" style="text-decoration:none">恢复科学 ›</a>
+        </div>
+        <div class="sp10"></div>
+        <div class="recovery-row">
+          <span style="width:70px;color:var(--text-secondary)">胸肩三头</span>
+          <div class="recovery-bar"><i style="width:100%"></i></div>
+          <span style="font-weight:700;color:var(--green)">100% 就绪</span>
+        </div>
+        <div class="recovery-row">
+          <span style="width:70px;color:var(--text-secondary)">背部二头</span>
+          <div class="recovery-bar"><i style="width:90%"></i></div>
+          <span style="font-weight:700;color:var(--green)">90% 就绪</span>
+        </div>
+        <div class="recovery-row">
+          <span style="width:70px;color:var(--text-secondary)">臀腿后链</span>
+          <div class="recovery-bar"><i style="width:85%"></i></div>
+          <span style="font-weight:700;color:var(--green)">85% 就绪</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="t12 faint">💡 下背与中枢神经状态稳定，建议按计划完成今日主项，不必额外加码</div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 三大项 / 计划 / 原则 / 主题 -->
+    <div class="px16">
+      <div class="s-card p0">
+        <a class="entry-row" href="one-rep-max.html">
+          <div class="col grow">
+            <span class="t15 semi">三大项数据</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">深蹲 90 · 卧推 70 · 硬拉 120 kg</span>
+          </div>
+          <span class="t13 pri">修改 ›</span>
+        </a>
+        <div class="divider" style="margin:0 16px"></div>
+        <a class="entry-row" href="plan-edit.html">
+          <div class="col grow">
+            <span class="t15 semi">训练计划编排</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">3 天 15 个动作 · 编辑动作、重量、组数与休息</span>
+          </div>
+          <span class="t13 pri">编辑 ›</span>
+        </a>
+        <div class="divider" style="margin:0 16px"></div>
+        <a class="entry-row" href="progression-v2.html">
+          <div class="col grow">
+            <span class="t15 semi">本周期递进</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">卧推第 2 / 8 次 · 3 个动作已停滞</span>
+          </div>
+          <span class="t13 pri">查看 ›</span>
+        </a>
+        <div class="divider" style="margin:0 16px"></div>
+        <a class="entry-row" href="principles.html">
+          <div class="col grow">
+            <span class="t15 semi">训练原则</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">RPE 8 是什么感觉 · 什么时候可以练到失败</span>
+          </div>
+          <span class="t13 pri">阅读 ›</span>
+        </a>
+        <div class="divider" style="margin:0 16px"></div>
+        <div class="entry-row" style="cursor:pointer" onclick="var themes=['orange','blue','cyan','emerald','gold','purple']; var idx=(themes.indexOf(localStorage.getItem('app-theme')||'orange')+1)%themes.length; setAppTheme(themes[idx]);">
+          <div class="col grow">
+            <span class="t15 semi">主题配色</span>
+            <div class="sp4"></div>
+            <span class="t13 sec">6 种专业运动主题色（点击快速轮换）</span>
+          </div>
+          <span class="t13 pri">切换 ›</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp18"></div>
+
+    <div class="row px16">
+      <span style="font-size:9px;color:var(--green)">●</span>
+      <span style="width:6px"></span>
+      <span style="font-size:12px" class="faint">训练数据、知识与身体档案均保存在本机</span>
+    </div>
+    <div style="height:74px"></div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="divider"></div>
+    <div class="tabs">
+      <div class="tab on">训练</div>
+      <a class="tab" href="knowledge.html">知识</a>
+      <a class="tab" href="history-calendar.html">记录</a>
+      <a class="tab" href="profile.html">我的</a>
+    </div>
+  </div>
+  <div class="home-bar"></div>
+
+</div>
+
+<script>
+  function setReadiness(mode) {
+    var btnN = document.getElementById('btn-ready-normal');
+    var btnT = document.getElementById('btn-ready-tired');
+    if (mode === 'normal') {
+      btnN.classList.add('on');
+      btnT.classList.remove('on');
+    } else {
+      btnN.classList.remove('on');
+      btnT.classList.add('on');
+    }
+  }
+
+  function handleInsertRestDay() {
+    alert('🛌 已插入主动恢复日！\n\n原定今日「Day 3 · 腿日」顺延至明天，超量恢复周期保持完整。');
+    var st = document.getElementById('cycleStatusText');
+    if (st) st.innerText = '🛌 今日处于主动恢复日 · 肌肉超量恢复中';
+  }
+
+  function handleSwapBodyPart() {
+    alert('⇄ 部位快速对调：\n\n已支持将空闲器械部位提前（如 D1 推与 D3 腿对调）。周期归档强绑定动作 ID，递进记录不受影响。');
+  }
+
+  function handleToggleReturnShield() {
+    var btn = document.getElementById('btnReturnShield');
+    if (btn.innerText.indexOf('已开启') !== -1) {
+      btn.innerText = '开启 ›';
+      btn.style.background = '#fff';
+      btn.style.color = 'var(--primary)';
+      alert('已关闭复训保护，恢复 100% 标准训练负荷。');
+    } else {
+      btn.innerText = '已开启 80% ✓';
+      btn.style.background = 'var(--primary)';
+      btn.style.color = '#fff';
+      alert('✈️ 已开启复训保护！\n\n今日腿日建议起始重量已自动按 80% 唤醒负荷折算，避免停训急性 DOMS。');
+    }
+  }
+</script>
+</body>
+</html>

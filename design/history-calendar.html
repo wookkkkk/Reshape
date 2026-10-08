@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>训练记录 · 日历与成就统计</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<!--
+  「记录」页面 · 训练日历与成就统计：
+  1. 月度成就总览：总出勤天数、月累计容量吨位、总活跃时长、PR 突破次数
+  2. 互动训练日历网格：直观标记推/拉/腿各训练日与主动休息日，点选即刻查看该日战报
+  3. 单日明细卡片：展示选中日期的动作组数、重量、容量与 PR 突破亮点
+  4. 周期连续出勤徽章：记录连续循环不缺卡成就
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <div class="screen">
+    <!-- 顶部标题 -->
+    <div class="px16" style="padding-top:90px">
+      <div class="row">
+        <div class="col grow">
+          <div class="t14 sec">训练成就与回顾</div>
+          <div class="sp6"></div>
+          <div style="font-size:26px;font-weight:800">训练日历</div>
+        </div>
+        <span class="badge round soft" style="font-size:12px">2026 年 8 月</span>
+      </div>
+      <div class="sp14"></div>
+    </div>
+
+    <!-- 月度核心成果 4 栏卡片 -->
+    <div class="px16">
+      <div class="cal-stats-grid">
+        <div class="cal-stat-card">
+          <div class="v">16<span style="font-size:12px;font-weight:normal"> 天</span></div>
+          <div class="k">本月出勤</div>
+        </div>
+        <div class="cal-stat-card">
+          <div class="v">78.5<span style="font-size:12px;font-weight:normal"> t</span></div>
+          <div class="k">总吨位</div>
+        </div>
+        <div class="cal-stat-card">
+          <div class="v">18.2<span style="font-size:12px;font-weight:normal"> h</span></div>
+          <div class="k">训练时长</div>
+        </div>
+        <div class="cal-stat-card">
+          <div class="v" style="color:var(--primary)">8<span style="font-size:12px;font-weight:normal"> 次</span></div>
+          <div class="k">超负荷 PR</div>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 训练日历互动网格 -->
+    <div class="px16">
+      <div class="cal-container">
+        <!-- 月份切换栏 -->
+        <div class="cal-nav">
+          <span class="t14 sec" style="cursor:pointer">‹ 7月</span>
+          <span class="cal-month-title">2026 年 8 月</span>
+          <span class="t14 faint" style="cursor:not-allowed">9月 ›</span>
+        </div>
+
+        <!-- 星期表头 -->
+        <div class="cal-weekdays">
+          <div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div>
+        </div>
+
+        <!-- 日历网格 (2026年8月: 1号是周六) -->
+        <div class="cal-grid" id="calGrid">
+          <!-- 上月占位 (7月27-31) -->
+          <div class="cal-day other-month">27</div>
+          <div class="cal-day other-month">28</div>
+          <div class="cal-day other-month">29</div>
+          <div class="cal-day other-month">30</div>
+          <div class="cal-day other-month">31</div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月1日', 'Day 1 推日', '52 分钟 · 12 正式组 · 4,850 kg', '1 项 PR 🚀', '卧推 47.5kg · 4组', '哑铃上斜 17.5kg · 3组', '双杠臂屈伸 自重+5kg · 3组')">1<i class="workout-dot"></i></div>
+          <div class="cal-day rest-day" onclick="selectRestDate(this, '8月2日')">2<i class="workout-dot"></i></div>
+
+          <!-- 第 2 周 (3-9) -->
+          <div class="cal-day workout" onclick="selectDate(this, '8月3日', 'Day 2 拉日', '55 分钟 · 14 正式组 · 5,600 kg', '0 项 PR', '单手高位下拉 32.5kg · 3组', '对握高位下拉 62.5kg · 4组', '单手哑铃划船 25kg · 3组')">3<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月4日', 'Day 3 腿日', '60 分钟 · 14 正式组 · 5,200 kg', '1 项 PR 🚀', '颈前深蹲 55kg · 5组', '罗马尼亚硬拉 70kg · 4组', '保加利亚分腿蹲 20kg · 4组')">4<i class="workout-dot"></i></div>
+          <div class="cal-day rest-day" onclick="selectRestDate(this, '8月5日')">5<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月6日', 'Day 1 推日', '50 分钟 · 12 正式组 · 4,900 kg', '1 项 PR 🚀', '杠铃卧推 47.5kg · 4组', '双杠臂屈伸 +5kg · 3组', 'Y字侧平举 2.5kg · 3组')">6<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月7日', 'Day 2 拉日', '54 分钟 · 13 正式组 · 5,450 kg', '0 项 PR', '对握下拉 62.5kg · 4组', '单手器械划船 50kg · 3组', '钢线正握弯举 7.5kg · 3组')">7<i class="workout-dot"></i></div>
+          <div class="cal-day rest-day" onclick="selectRestDate(this, '8月8日')">8<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月9日', 'Day 3 腿日', '58 分钟 · 13 正式组 · 5,100 kg', '1 项 PR 🚀', '颈前深蹲 55kg · 4组', '罗马尼亚硬拉 70kg · 4组', '单腿硬拉 20kg · 3组')">9<i class="workout-dot"></i></div>
+
+          <!-- 第 3 周 (10-16) -->
+          <div class="cal-day workout" onclick="selectDate(this, '8月10日', 'Day 1 推日', '53 分钟 · 13 正式组 · 5,020 kg', '1 项 PR 🚀', '杠铃卧推 50kg · 4组', '哑铃上斜 17.5kg · 3组', '仰卧臂屈伸 7.5kg · 3组')">10<i class="workout-dot"></i></div>
+          <div class="cal-day rest-day" onclick="selectRestDate(this, '8月11日')">11<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月12日', 'Day 2 拉日', '56 分钟 · 14 正式组 · 5,720 kg', '1 项 PR 🚀', '对握下拉 65kg · 4组', '单手哑铃划船 25kg · 3组', '钢线正握弯举 7.5kg · 3组')">12<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月13日', 'Day 3 腿日', '61 分钟 · 14 正式组 · 5,300 kg', '0 项 PR', '颈前深蹲 55kg · 5组', '罗马尼亚硬拉 70kg · 4组', '保加利亚分腿蹲 20kg · 4组')">13<i class="workout-dot"></i></div>
+          <div class="cal-day rest-day" onclick="selectRestDate(this, '8月14日')">14<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月15日', 'Day 1 推日', '49 分钟 · 12 正式组 · 4,950 kg', '0 项 PR', '杠铃卧推 50kg · 4组', '哑铃上斜 17.5kg · 3组', '双杠臂屈伸 +5kg · 3组')">15<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月16日', 'Day 2 拉日', '55 分钟 · 13 正式组 · 5,500 kg', '1 项 PR 🚀', '对握下拉 65kg · 4组', '坐姿开肘划船 32.5kg · 3组', '钢线弯举 7.5kg · 3组')">16<i class="workout-dot"></i></div>
+
+          <!-- 第 4 周 (17-23) -->
+          <div class="cal-day workout" onclick="selectDate(this, '8月17日', 'Day 3 腿日', '59 分钟 · 14 正式组 · 5,280 kg', '1 项 PR 🚀', '颈前深蹲 55kg · 5组', '罗马尼亚硬拉 70kg · 4组', '保加利亚分腿蹲 22.5kg · 4组')">17<i class="workout-dot"></i></div>
+          <div class="cal-day rest-day" onclick="selectRestDate(this, '8月18日')">18<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月19日', 'Day 1 推日', '51 分钟 · 13 正式组 · 5,080 kg', '0 项 PR', '杠铃卧推 50kg · 4组', '哑铃上斜 17.5kg · 3组', '双杠臂屈伸 +5kg · 3组')">19<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月20日', 'Day 2 拉日', '57 分钟 · 14 正式组 · 5,800 kg', '1 项 PR 🚀', '对握下拉 65kg · 4组', '单手器械划船 50kg · 3组', '单手钢线下拉 32.5kg · 3组')">20<i class="workout-dot"></i></div>
+          <div class="cal-day rest-day" onclick="selectRestDate(this, '8月21日')">21<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月22日', 'Day 3 腿日', '58 分钟 · 13 正式组 · 5,130 kg', '1 项 PR 🚀', '颈前深蹲 55kg · 3组', '罗马尼亚硬拉 70kg · 3组', '保加利亚分腿蹲 22.5kg · 4组')">22<i class="workout-dot"></i></div>
+          <div class="cal-day rest-day" onclick="selectRestDate(this, '8月23日')">23<i class="workout-dot"></i></div>
+
+          <!-- 第 5 周 (24-30) -->
+          <div class="cal-day workout selected" onclick="selectDate(this, '8月24日', 'Day 3 腿日', '用时 58 分钟 · 13 正式组 · 5,130 kg 容量', '2 项 PR 🚀', '颈前深蹲 3 正式组 · 55 kg', '罗马尼亚硬拉 3 正式组 · 70 kg', '保加利亚分腿蹲 4 正式组 · 22.5 kg (+1次 PR)')">24<i class="workout-dot"></i></div>
+          <div class="cal-day workout" onclick="selectDate(this, '8月25日', 'Day 1 推日', '52 分钟 · 13 正式组 · 5,100 kg', '0 项 PR', '杠铃卧推 50kg · 4组', '哑铃上斜 17.5kg · 3组', '仰卧臂屈伸 7.5kg · 3组')">25<i class="workout-dot"></i></div>
+          <div class="cal-day rest-day" onclick="selectRestDate(this, '8月26日')">26<i class="workout-dot"></i></div>
+          <div class="cal-day today" onclick="selectToday(this)">27</div>
+          <div class="cal-day">28</div>
+          <div class="cal-day">29</div>
+          <div class="cal-day">30</div>
+
+          <!-- 第 6 周 (31) -->
+          <div class="cal-day">31</div>
+        </div>
+
+        <!-- 图例解释 -->
+        <div class="cal-legend">
+          <div class="cal-legend-item">
+            <span class="cal-legend-dot" style="background:var(--primary)"></span>
+            <span>训练已完成</span>
+          </div>
+          <div class="cal-legend-item">
+            <span class="cal-legend-dot" style="background:#9a9cae"></span>
+            <span>主动休息日</span>
+          </div>
+          <div class="cal-legend-item">
+            <span class="cal-legend-dot" style="border:1.5px solid var(--primary);background:transparent"></span>
+            <span>今日</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 选中日期训练详情卡片 -->
+    <div class="px16">
+      <div class="s-card p18" id="dayDetailCard">
+        <div class="row">
+          <div>
+            <div class="t15 semi" id="cardDayTitle">8月24日 · Day 3 腿日</div>
+            <div class="sp4"></div>
+            <div class="t12 sec" id="cardDaySubtitle">用时 58 分钟 · 13 正式组 · 5,130 kg 容量</div>
+          </div>
+          <span class="badge round soft" id="cardDayBadge" style="color:var(--primary);font-weight:700">2 项 PR 🚀</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="sp10"></div>
+
+        <!-- 动作摘要列表 -->
+        <div id="cardExercisesList">
+          <div class="row" style="font-size:13px;line-height:1.6">
+            <span class="grow">颈前深蹲</span>
+            <span class="faint">3 正式组 · 55 kg</span>
+          </div>
+          <div class="sp4"></div>
+          <div class="row" style="font-size:13px;line-height:1.6">
+            <span class="grow">罗马尼亚硬拉</span>
+            <span class="faint">3 正式组 · 70 kg</span>
+          </div>
+          <div class="sp4"></div>
+          <div class="row" style="font-size:13px;line-height:1.6">
+            <span class="grow">保加利亚分腿蹲</span>
+            <span class="pri bold">4 正式组 · 22.5 kg (+1次 PR)</span>
+          </div>
+        </div>
+        <div class="sp12"></div>
+        <a class="cta" id="btnViewReport" href="summary.html" style="padding:10px 0;font-size:14px">查看该日完整战报 ›</a>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 连续出勤成就 -->
+    <div class="px16">
+      <div class="s-card" style="background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);border:1px solid #fde68a">
+        <div class="row">
+          <span style="font-size:20px">🔥</span>
+          <div class="col grow" style="margin-left:10px">
+            <span class="t14 bold" style="color:#92400e">连续 3 周三分化完整执行</span>
+            <div class="sp3"></div>
+            <span class="t12" style="color:#b45309">肌肉处于最佳渐进超负荷节奏，继续保持！</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sp18"></div>
+
+    <div style="height:84px"></div>
+  </div>
+
+  <!-- 底部 Tab 栏 -->
+  <div class="tab-bar">
+    <div class="divider"></div>
+    <div class="tabs">
+      <a class="tab" href="home-v2.html">训练</a>
+      <a class="tab" href="knowledge.html">知识</a>
+      <div class="tab on">记录</div>
+      <a class="tab" href="profile.html">我的</a>
+    </div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+
+<script>
+  function clearSelected() {
+    document.querySelectorAll('.cal-day').forEach(function(d) {
+      d.classList.remove('selected');
+    });
+  }
+
+  function selectDate(el, dateStr, titleStr, subStr, badgeStr, ex1, ex2, ex3) {
+    clearSelected();
+    if (el) el.classList.add('selected');
+    document.getElementById('cardDayTitle').innerText = dateStr + ' · ' + titleStr;
+    document.getElementById('cardDaySubtitle').innerText = subStr;
+    document.getElementById('cardDayBadge').innerText = badgeStr;
+    document.getElementById('cardDayBadge').style.display = badgeStr ? 'inline-block' : 'none';
+    
+    var html = '<div class="row" style="font-size:13px;line-height:1.6"><span class="grow">' + ex1 + '</span></div><div class="sp4"></div>' +
+               '<div class="row" style="font-size:13px;line-height:1.6"><span class="grow">' + ex2 + '</span></div><div class="sp4"></div>' +
+               '<div class="row" style="font-size:13px;line-height:1.6"><span class="grow pri bold">' + ex3 + '</span></div>';
+    document.getElementById('cardExercisesList').innerHTML = html;
+    document.getElementById('btnViewReport').style.display = 'block';
+  }
+
+  function selectRestDate(el, dateStr) {
+    clearSelected();
+    if (el) el.classList.add('selected');
+    document.getElementById('cardDayTitle').innerText = dateStr + ' · 主动恢复日 🛌';
+    document.getElementById('cardDaySubtitle').innerText = '充分休息 · 肌肉超量恢复黄金期';
+    document.getElementById('cardDayBadge').innerText = '恢复日';
+    document.getElementById('cardDayBadge').style.display = 'inline-block';
+    document.getElementById('cardExercisesList').innerHTML = '<div class="t13 sec" style="line-height:1.6;padding:6px 0">今日未安排负重力量训练，肌纤维与中枢神经系统正在超量恢复修复，为下一轮循环蓄力。</div>';
+    document.getElementById('btnViewReport').style.display = 'none';
+  }
+
+  function selectToday(el) {
+    clearSelected();
+    if (el) el.classList.add('selected');
+    document.getElementById('cardDayTitle').innerText = '今日 · 8月27日 (待开练)';
+    document.getElementById('cardDaySubtitle').innerText = '预定训练：Day 3 腿日 · 14 组';
+    document.getElementById('cardDayBadge').innerText = '今日待练';
+    document.getElementById('cardDayBadge').style.display = 'inline-block';
+    document.getElementById('cardExercisesList').innerHTML = '<div class="t13 sec" style="line-height:1.6;padding:6px 0">今日训练尚未完成，请前往首页点击「开始腿日训练」。</div>';
+    document.getElementById('btnViewReport').style.display = 'none';
+  }
+</script>
+</body>
+</html>

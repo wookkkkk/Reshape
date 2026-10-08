@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三大项数据 · 建议重量的推算依据</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<!--
+  三大项 1RM 设置页。对应 KaishengwangXTanchengyi 的 HomePage + LiftInput +
+  UserDataPanel，算法在 src/utils/weightCalculator.ts。
+
+  这一屏是整套建议重量的入口：没有 1RM，后面每个动作的建议值都是 0，
+  所以它必须能在 30 秒内填完 —— 记得住 1RM 的直接填，记不住的用一组
+  次要重量反推（Brzycki）。两种方式在同一张卡里切换，不拆成两个页面。
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <div class="screen">
+    <!-- 顶部留白 = 状态栏 44 + 胶囊 46 -->
+    <div style="padding-top:90px">
+      <div class="row" style="padding:10px 100px 8px 16px">
+        <span style="font-size:19px;color:var(--text-secondary);cursor:pointer">✕</span>
+        <div style="width:14px"></div>
+        <span class="t15 sec">三大项数据</span>
+      </div>
+    </div>
+
+    <div class="px16">
+      <div class="t14 pri">建议重量的推算依据</div>
+      <div class="sp8"></div>
+      <div class="form-title">你的三大项</div>
+      <div class="sp8"></div>
+      <div class="t13 sec">填一次就够。之后每个动作的建议重量都从这三个数算出来，练到第 8 次再回来重测。</div>
+      <div class="sp18"></div>
+    </div>
+
+    <!-- 深蹲：展开成「用组重量估算」的状态 -->
+    <div class="px16">
+      <div class="s-card p0">
+        <div class="field">
+          <div class="row">
+            <span class="lift-name grow">深蹲</span>
+            <span class="lift-1rm">90<span class="unit">kg</span></span>
+          </div>
+          <div class="sp12"></div>
+          <!-- 两种录入方式。Kuikly 没有 SegmentedButton，实现时 Row + Box 自己拼 -->
+          <div class="seg">
+            <div class="seg-item">直接填 1RM</div>
+            <div class="seg-item on">用一组反推</div>
+          </div>
+          <div class="sp12"></div>
+          <div class="row gap10">
+            <div class="grow">
+              <div class="field-label">重量 (kg)</div>
+              <div class="sp6"></div>
+              <input class="mini-input" value="80" inputmode="decimal" aria-label="深蹲组重量">
+            </div>
+            <div class="grow">
+              <div class="field-label">完成次数</div>
+              <div class="sp6"></div>
+              <input class="mini-input" value="5" inputmode="numeric" aria-label="深蹲完成次数">
+            </div>
+          </div>
+          <div class="sp12"></div>
+          <!-- Brzycki。公式写出来，用户才知道这个数不是凭空给的 -->
+          <div class="formula">1RM = 重量 × 36 ÷ (37 − 次数)<br>= 80 × 36 ÷ 32</div>
+          <div class="sp8"></div>
+          <div class="calc-out">估算 1RM ≈ 90 kg · 建议使用 3~5 次的重量估算，准确度最高且避免中枢过度疲劳</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 卧推 / 硬拉：已填好，收起 -->
+        <div class="row" style="padding:16px">
+          <div class="col grow">
+            <span class="lift-name">卧推</span>
+            <div class="sp3"></div>
+            <span class="t13 sec">直接填的 1RM</span>
+          </div>
+          <span class="lift-1rm">70<span class="unit">kg</span></span>
+          <div style="width:12px"></div>
+          <span class="inline-edit">改</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row" style="padding:16px">
+          <div class="col grow">
+            <span class="lift-name">硬拉</span>
+            <div class="sp3"></div>
+            <span class="t13 sec">直接填的 1RM</span>
+          </div>
+          <span class="lift-1rm">120<span class="unit">kg</span></span>
+          <div style="width:12px"></div>
+          <span class="inline-edit">改</span>
+        </div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!--
+      推算规则说明。这几条都是算法里写死的行为，用户迟早会发现，
+      不如提前说清楚，免得看到 22.5 这种数字以为是 bug。
+    -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="t15 semi">建议重量是怎么来的</div>
+        <div class="sp12"></div>
+        <div class="keypoint">每个动作有自己的系数，先按主项 1RM 折算，再按本组目标次数取 RPE 8 对应的百分比。</div>
+        <div class="keypoint">结果一律取整到 2.5 kg —— 器械房里能凑出来的重量就是这个步长。</div>
+        <div class="keypoint">哑铃动作的系数已经含了单手换算，显示的是<strong>单手</strong>重量。</div>
+        <div class="keypoint">主项每次训练 +2.5 kg，8 次一个周期，练完回来重测 1RM。</div>
+        <div class="sp12"></div>
+        <div class="divider"></div>
+        <div class="sp12"></div>
+        <div class="t13 faint">映射表里没有的动作（包括自己新建的）不给建议值，按计划的起始重量走。</div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <!-- 力量水平评级与 DOTS 评分标准 (男女通用评分与倍数矩阵) -->
+    <div class="px16" id="standards">
+      <div class="s-card">
+        <div class="row">
+          <span class="t15 semi grow">力量水平与 DOTS 评级标准</span>
+          <span class="badge round soft">男女多项式矩阵</span>
+        </div>
+        <div class="sp12"></div>
+        <div class="t13 sec" style="line-height:1.6">
+          DOTS 通过四次多项式精准消除男女生理与体重差异，评分跨性别完全可比：
+        </div>
+        <div class="sp12"></div>
+        <div class="log-row" style="background:#f8f9fc;border-radius:8px;padding:8px 12px">
+          <span class="no" style="font-weight:700">新手 (Novice)</span>
+          <span class="val">&lt; 200 分</span>
+          <span class="t12 sec">男: 0.8x/1.0x/1.3x · 女: 0.5x/0.8x/1.0x</span>
+        </div>
+        <div class="log-row" style="background:#f8f9fc;border-radius:8px;padding:8px 12px">
+          <span class="no" style="font-weight:700">初级 (Intermediate)</span>
+          <span class="val">200–275 分</span>
+          <span class="t12 sec">男: 1.0x/1.3x/1.7x · 女: 0.7x/1.0x/1.3x</span>
+        </div>
+        <div class="log-row" style="background:var(--primary-tint);border:1px solid var(--primary);border-radius:8px;padding:8px 12px">
+          <span class="no" style="font-weight:800;color:var(--primary)">进阶 (Advanced) ★</span>
+          <span class="val" style="color:var(--primary);font-weight:800">275–350 分</span>
+          <span class="t12 pri bold">男: 1.2x/1.6x/2.0x · 女: 0.9x/1.3x/1.6x</span>
+        </div>
+        <div class="log-row" style="background:#f8f9fc;border-radius:8px;padding:8px 12px">
+          <span class="no" style="font-weight:700">精英 (Elite)</span>
+          <span class="val">350–425 分</span>
+          <span class="t12 sec">男: 1.5x/2.0x/2.5x · 女: 1.1x/1.6x/2.0x</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="t12 faint">💡 当前档案：男性 · 体重 75.5kg · 三大项总和 280kg · DOTS 评分为 <b>312.5 分 (进阶水平)</b></div>
+      </div>
+    </div>
+    <div class="sp12"></div>
+
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span style="font-size:9px;color:var(--green)">●</span>
+          <span style="width:6px"></span>
+          <span class="t13 sec grow">三大项数据只保存在本机，不上传</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 给吸底 CTA 让位，对应 CTA_BAR_HEIGHT = 96 -->
+    <div style="height:96px"></div>
+  </div>
+
+  <div class="sticky-bar">
+    <div class="divider"></div>
+    <div class="inner"><button class="cta">保存并回到训练</button></div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+</body>
+</html>

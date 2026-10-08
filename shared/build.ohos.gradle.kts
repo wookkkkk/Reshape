@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
@@ -12,10 +14,8 @@ val KEY_PAGE_NAME = "pageName"
 
 kotlin {
     androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
         }
         publishLibraryVariants("release")
     }
@@ -104,13 +104,12 @@ ksp {
 }
 
 dependencies {
-    compileOnly("com.tencent.kuikly-open:core-ksp:${Version.getKuiklyOhosVersion()}") {
-        add("kspAndroid", this)
-        add("kspIosArm64", this)
-        add("kspIosX64", this)
-        add("kspIosSimulatorArm64", this)
-        add("kspOhosArm64", this)
-    }
+    val coreKsp = "com.tencent.kuikly-open:core-ksp:${Version.getKuiklyOhosVersion()}"
+    add("kspAndroid", coreKsp)
+    add("kspIosArm64", coreKsp)
+    add("kspIosX64", coreKsp)
+    add("kspIosSimulatorArm64", coreKsp)
+    add("kspOhosArm64", coreKsp)
 }
 
 android {
@@ -118,12 +117,21 @@ android {
     compileSdk = 34
     defaultConfig {
         minSdk = 21
-        targetSdk = 30
     }
     sourceSets {
         named("main") {
             assets.srcDirs("src/commonMain/assets")
         }
+    }
+}
+
+tasks.matching { it.name == "kspCommonMainKotlinMetadata" }.configureEach {
+    enabled = false
+}
+
+tasks.matching { it.name == "compileCommonMainKotlinMetadata" }.configureEach {
+    doFirst {
+        delete(layout.buildDirectory.dir("generated/ksp/metadata/commonMain/kotlin"))
     }
 }
 

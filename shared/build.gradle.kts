@@ -1,4 +1,5 @@
 import com.tencent.kuikly.gradle.config.KuiklyConfig
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     kotlin("multiplatform")
@@ -15,10 +16,8 @@ val KEY_PAGE_NAME = "pageName"
 
 kotlin {
     androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
         }
         publishLibraryVariants("release")
     }
@@ -26,7 +25,7 @@ kotlin {
     js(IR) {
         browser {
             webpackTask {
-                outputFileName = "nativevue2.js" // 最后输出的名字
+                mainOutputFileName = "nativevue2.js" // 最后输出的名字
             }
 
             commonWebpackConfig {
@@ -117,13 +116,12 @@ ksp {
 }
 
 dependencies {
-    compileOnly("com.tencent.kuikly-open:core-ksp:${Version.getKuiklyVersion()}") {
-        add("kspAndroid", this)
-        add("kspIosArm64", this)
-        add("kspIosX64", this)
-        add("kspIosSimulatorArm64", this)
-        add("kspJs", this)
-    }
+    val coreKsp = "com.tencent.kuikly-open:core-ksp:${Version.getKuiklyVersion()}"
+    add("kspAndroid", coreKsp)
+    add("kspIosArm64", coreKsp)
+    add("kspIosX64", coreKsp)
+    add("kspIosSimulatorArm64", coreKsp)
+    add("kspJs", coreKsp)
 }
 
 android {
@@ -131,12 +129,25 @@ android {
     compileSdk = 34
     defaultConfig {
         minSdk = 21
-        targetSdk = 30
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     sourceSets {
         named("main") {
             assets.srcDirs("src/commonMain/assets")
         }
+    }
+}
+
+tasks.matching { it.name == "kspCommonMainKotlinMetadata" }.configureEach {
+    enabled = false
+}
+
+tasks.matching { it.name == "compileCommonMainKotlinMetadata" }.configureEach {
+    doFirst {
+        delete(layout.buildDirectory.dir("generated/ksp/metadata/commonMain/kotlin"))
     }
 }
 

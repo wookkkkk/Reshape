@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 2 拉日 · 5 个动作</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="screens.css">
+<script src="theme.js"></script>
+</head>
+<!--
+  对应 TrainingPages.kt 的 DayPage(day = 2)，结构与 day-push.html 完全一致。
+  文案照搬 TrainingPlan.kt 的 days[1].exercises。
+
+  这一天五个动作里有四个挂在硬拉 1RM（120kg）上，只有钢线弯举
+  用的是 dumbbell 单位 —— 名字叫钢线、单位是「kg/只」，见页尾说明。
+-->
+<body class="screen-page">
+<div class="phone">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <span class="icons">●●●● ᯤ ▮</span>
+  </div>
+  <div class="capsule"><span>···</span><span class="sep"></span><span>⊙</span></div>
+
+  <div class="screen">
+    <div style="padding-top:90px">
+      <div class="row" style="padding:10px 16px 8px">
+        <a href="plan.html" style="font-size:19px;color:var(--text-secondary);text-decoration:none">‹</a>
+        <div style="width:14px"></div>
+        <span class="t15 sec grow">Day 2 · 拉日设计蓝图</span>
+        <a class="t13 pri bold" href="plan-edit.html?day=2" style="text-decoration:none">🛠️ 自定义编排 ›</a>
+      </div>
+    </div>
+
+    <div class="px16">
+      <div class="row">
+        <span style="font-size:26px">🔙</span>
+        <div style="width:10px"></div>
+        <div class="grow">
+          <div class="form-title">拉日</div>
+          <div class="sp3"></div>
+          <div class="t13 sec">背 + 三角肌后束 + 肱二头肌</div>
+        </div>
+      </div>
+      <div class="sp12"></div>
+      <div class="t13 sec" style="line-height:1.7">
+        背部训练在三分化里往往是被敷衍的一天，但这份计划给了足够的重视。垂直拉（下拉类）和水平拉（划船类）是背部训练的两个基本方向，这天两个方向都覆盖了。
+      </div>
+      <div class="sp16"></div>
+    </div>
+
+    <!-- ============ 1 单手钢线下拉 ============ -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-num">1</span>
+          <div style="width:10px"></div>
+          <span class="t15 semi grow">单手钢线下拉</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="tag-row">
+          <span class="tg">背阔肌</span>
+          <span class="tg">垂直拉</span>
+          <span class="tg">复合动作</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="t13 sec" style="line-height:1.7">
+          单手钢线的好处是可以更好地调整角度，让阻力方向跟背阔肌的纤维走向对齐。对于新手来说，单手比双手更容易找到背阔肌的发力感。
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row gap12">
+          <div class="info-cell grow"><div class="k">组数</div><div class="v">4 组</div></div>
+          <div class="info-cell grow"><div class="k">强度</div><div class="v">前3组 RPE 8</div></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="info-cell"><div class="k">次数</div><div class="v">前3组 12次 + 最后一组 10次到力竭 → 休息5秒 → 5次到力竭</div></div>
+        <div class="sp12"></div>
+
+        <div class="row">
+          <span class="w-badge semi">~ 32.5 kg 起步</span>
+          <div style="width:8px"></div>
+          <span class="w-note">熟练后再递进</span>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="detail">
+          <div class="k">📈 递进逻辑</div>
+          <div class="v">后续训练逐渐增加力竭组数量，但始终以动作质量为优先。</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="detail tip">
+          <div class="k">💡 执行要点</div>
+          <div class="v">专注背阔肌发力感，不要靠手臂拽。动作质量高于重量。</div>
+        </div>
+        <div class="sp12"></div>
+
+        <!--
+          这里的 32.5 是按 12 次算的正确值。跑现在的代码会得到 45 ——
+          必须在实现里修掉，否则给用户的是一个偏高 12.5kg 的起步重量。
+        -->
+        <div class="warn">
+          <b>实现注意</b>parseTargetReps 对这条 reps 抓到的第一个数字是「前<b>3</b>组」里的 3，会按 3 次算出 45kg。正确值是按 12 次算的 32.5kg，本页显示的就是这个。修法：reps 字段里的组数描述要与次数分离，或在 EXERCISE_WEIGHT_MAP 里显式写 targetReps。
+        </div>
+      </div>
+      <div class="sp12"></div>
+    </div>
+
+    <!-- ============ 2 对握下拉 ============ -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-num">2</span>
+          <div style="width:10px"></div>
+          <span class="t15 semi grow">对握下拉</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="tag-row">
+          <span class="tg">主线推进</span>
+          <span class="tg">背阔肌+圆肌</span>
+          <span class="tg">不力竭</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="t13 sec" style="line-height:1.7">
+          背日里唯一一个鼓励上重量的动作。练背阔肌+圆肌，是垂直拉的另一变式。
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row gap12">
+          <div class="info-cell grow"><div class="k">组数</div><div class="v">4 组</div></div>
+          <div class="info-cell grow"><div class="k">强度</div><div class="v">RPE 8</div></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="info-cell"><div class="k">次数</div><div class="v">8-12 次</div></div>
+        <div class="sp12"></div>
+
+        <!-- 拉日唯一的 LINEAR，跟卧推同一套递进面板 -->
+        <div class="row">
+          <span class="w-badge linear">~ 62.5 kg · RPE 8</span>
+          <div style="width:8px"></div>
+          <span class="w-note">第 1 次 · +2.5kg/次</span>
+        </div>
+        <div class="sp8"></div>
+        <div class="row">
+          <span class="t13 sec grow">本月 8 次训练的完整递进</span>
+          <a class="inline-edit" href="progression-v2.html" style="text-decoration:none">展开</a>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="detail">
+          <div class="k">📈 递进逻辑</div>
+          <div class="v">动作熟练度高的可以做 8 次（偏重），感觉不好的做 12 次。随着训练推进，在动作标准的前提下逐渐加重。</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="detail tip">
+          <div class="k">💡 执行要点</div>
+          <div class="v">这是希望你让重量一点一点往上走的动作。但前提是动作标准——别为了上重量牺牲动作质量。</div>
+        </div>
+      </div>
+      <div class="sp12"></div>
+    </div>
+
+    <!-- ============ 3 单手器械划船 ============ -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-num">3</span>
+          <div style="width:10px"></div>
+          <span class="t15 semi grow">单手器械划船</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="tag-row">
+          <span class="tg">水平拉</span>
+          <span class="tg">背阔肌</span>
+          <span class="tg">可控力竭</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="t13 sec" style="line-height:1.7">
+          水平拉动作，与垂直拉互补。用器械而非哑铃——器械多了坐着的支点和手撑的支点，稳定性更好，能用更大重量。
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row gap12">
+          <div class="info-cell grow"><div class="k">组数</div><div class="v">4 组</div></div>
+          <div class="info-cell grow"><div class="k">强度</div><div class="v">前3组 RPE 8</div></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="info-cell"><div class="k">次数</div><div class="v">10次 + 最后一组 10次到力竭 + 5次</div></div>
+        <div class="sp12"></div>
+
+        <div class="row">
+          <span class="w-badge semi">~ 50 kg 起步</span>
+          <div style="width:8px"></div>
+          <span class="w-note">熟练后再递进</span>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="detail">
+          <div class="k">📈 递进逻辑</div>
+          <div class="v">第2周再加一个力竭组，第3周再加一个。当力竭组加到一定数量后，减回 2 组，加重，从 10 次非力竭重新开始循环。</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="detail tip">
+          <div class="k">💡 执行要点</div>
+          <div class="v">水平拉和垂直拉（下拉类）是背部训练的两个基本方向，缺一不可。</div>
+        </div>
+        <div class="sp12"></div>
+
+        <!-- 这条递进跟固定的 +2.5kg/次 不是一回事，得单独一套状态 -->
+        <div class="warn">
+          <b>实现注意</b>「加力竭组 → 加满后减回 2 组并加重」是一个带周期的双变量递进，calcProgressionWeight 的线性 +2.5kg 表达不了。需要记住当前力竭组数，才能判断这次该加组还是该加重。
+        </div>
+      </div>
+      <div class="sp12"></div>
+    </div>
+
+    <!-- ============ 4 坐姿开肘划船 ============ -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-num">4</span>
+          <div style="width:10px"></div>
+          <span class="t15 semi grow">坐姿开肘划船</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="tag-row">
+          <span class="tg">中下斜方肌</span>
+          <span class="tg">肩胛后缩</span>
+          <span class="tg">不力竭</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="t13 sec" style="line-height:1.7">
+          练的是肩胛骨的后缩能力——把两个肩胛骨往中间夹。很多人推得多拉得少，胸椎长期处于弯曲状态，肩关节不舒服。开发好肩胛骨后缩的能力，肩痛问题能改善不少。
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row gap12">
+          <div class="info-cell grow"><div class="k">组数</div><div class="v">4 组</div></div>
+          <div class="info-cell grow"><div class="k">强度</div><div class="v">RPE 8</div></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="info-cell"><div class="k">次数</div><div class="v">12 次</div></div>
+        <div class="sp12"></div>
+
+        <div class="row">
+          <span class="w-badge semi">~ 32.5 kg 起步</span>
+          <div style="width:8px"></div>
+          <span class="w-note">感觉不对就往下降</span>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="detail">
+          <div class="k">📈 递进逻辑</div>
+          <div class="v">如果有海豹划船器械，直接替换。核心要求：有感觉。不是抡重量，用中下斜方肌去控制肩胛骨的内收。</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="detail tip">
+          <div class="k">💡 执行要点</div>
+          <div class="v">如果感觉不到中下斜方肌的发力，说明重量太大了，降。感觉比重量重要得多。</div>
+        </div>
+      </div>
+      <div class="sp12"></div>
+    </div>
+
+    <!-- ============ 5 钢线弯举（肩屈位） ============ -->
+    <div class="px16">
+      <div class="s-card">
+        <div class="row">
+          <span class="ex-num">5</span>
+          <div style="width:10px"></div>
+          <span class="t15 semi grow">钢线弯举（肩屈位）</span>
+          <span class="hand">单手</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="tag-row">
+          <span class="tg">单关节</span>
+          <span class="tg">二头长头</span>
+          <span class="tg">可力竭</span>
+        </div>
+        <div class="sp10"></div>
+        <div class="t13 sec" style="line-height:1.7">
+          手臂举过头顶来做弯举，练肱二头肌长头。利用"被动不足"原理：手臂举过头顶时，二头肌短头已被拉长，弯举时长头承担更多负荷。
+        </div>
+        <div class="sp12"></div>
+
+        <div class="row gap12">
+          <div class="info-cell grow"><div class="k">组数</div><div class="v">3 组</div></div>
+          <div class="info-cell grow"><div class="k">强度</div><div class="v">RPE 8</div></div>
+        </div>
+        <div class="sp8"></div>
+        <div class="info-cell"><div class="k">次数</div><div class="v">12 次</div></div>
+        <div class="sp12"></div>
+
+        <div class="row">
+          <span class="w-badge fixed">~ 7.5 kg / 只 参考</span>
+          <div style="width:8px"></div>
+          <span class="w-note">固定重量 · 触力竭即可</span>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="detail">
+          <div class="k">📈 递进逻辑</div>
+          <div class="v">保持 RPE 8 持续训练，熟练后最后两组可推至力竭。</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="detail tip">
+          <div class="k">💡 执行要点</div>
+          <div class="v">肩屈位弯举比站姿弯举效果更集中，能有效孤立二头肌长头。</div>
+        </div>
+        <div class="sp12"></div>
+
+        <div class="warn">
+          <b>实现注意</b>这个动作在 EXERCISE_WEIGHT_MAP 里登记的单位是 <b>dumbbell</b>，所以标签是「kg/只」，但名字是钢线动作 —— 钢线单手拉的配重就是配重块读数，不该做单手折算。要么改成 cable，要么把动作名改成「单臂哑铃弯举（肩屈位）」，两边对齐一个。
+        </div>
+      </div>
+      <div class="sp18"></div>
+    </div>
+
+    <div class="px16">
+      <div class="day-nav">
+        <a href="day-push.html">‹ Day 1 推日</a>
+        <a href="day-legs.html">Day 3 腿日 ›</a>
+      </div>
+      <div class="sp12"></div>
+      <a class="s-card row" href="principles.html" style="text-decoration:none;color:inherit">
+        <span style="font-size:20px">📋</span>
+        <div style="width:12px"></div>
+        <div class="grow">
+          <div class="t15 semi">查看训练原则</div>
+          <div class="sp3"></div>
+          <div class="t13 faint">为什么主项不力竭、RPE 8 到底是什么感觉</div>
+        </div>
+        <span class="t15 pri">›</span>
+      </a>
+      <div style="height:96px"></div>
+    </div>
+  </div>
+
+  <div class="sticky-bar">
+    <div class="divider"></div>
+    <div class="inner"><a class="cta" href="record-v2.html" style="text-decoration:none">开始拉日训练 ›</a></div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+</body>
+</html>

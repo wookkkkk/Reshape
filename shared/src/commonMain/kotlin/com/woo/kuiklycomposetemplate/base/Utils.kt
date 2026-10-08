@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.woo.kuiklycomposetemplate.base
 
 import com.tencent.kuikly.core.base.BaseObject

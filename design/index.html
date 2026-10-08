@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reshape · 全站界面设计稿</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /*
+   * 画廊页。每一屏用 iframe 嵌进来，尺寸就是真机的 390 x 844，
+   * 这样单独打开某一个 html 和在这里看到的完全一致。
+   */
+  body {
+    background: #e6e8f0;
+    padding: 40px 32px 64px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .lead {
+    max-width: 720px;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .lead code {
+    background: #fff;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 13px;
+    color: var(--primary);
+  }
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin-top: 32px;
+  }
+  figure {
+    width: 390px;
+  }
+  /* 阴影和圆角只加在画廊里，屏内不加，免得影响对尺寸的判断 */
+  figure iframe {
+    display: block;
+    width: 390px;
+    height: 844px;
+    border: 0;
+    border-radius: 22px;
+    background: var(--bg);
+    box-shadow: 0 14px 40px rgba(30, 32, 51, 0.16);
+  }
+  figcaption {
+    margin-top: 14px;
+  }
+  figcaption .name {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  figcaption .src {
+    margin-top: 3px;
+    font-size: 12px;
+    color: var(--primary);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  figcaption .note {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .theme-bar {
+    position: sticky;
+    top: 16px;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 30px rgba(30, 32, 51, 0.1);
+    border-radius: 16px;
+    padding: 12px 18px;
+    margin: 24px 0 28px;
+    max-width: 820px;
+  }
+  .theme-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .theme-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tp {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f0f1f7;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.2s;
+  }
+  .tp:hover {
+    background: #e5e7f0;
+  }
+  .tp.on {
+    background: #fff;
+    color: var(--text-primary);
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  .tp .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+</style>
+<script src="theme.js"></script>
+</head>
+<body>
+
+<h1>Reshape · 全站界面设计稿</h1>
+
+<!-- 实时主题切换栏 -->
+<div class="theme-bar">
+  <div class="theme-title">🎨 主题配色（用户可选）：</div>
+  <div class="theme-pills">
+    <div class="tp on" data-theme-val="orange" onclick="setAppTheme('orange');updateActive(this)">
+      <span class="dot" style="background:#ff5722"></span>活力力量橙 (默认)
+    </div>
+    <div class="tp" data-theme-val="blue" onclick="setAppTheme('blue');updateActive(this)">
+      <span class="dot" style="background:#2563eb"></span>专业曜石蓝
+    </div>
+    <div class="tp" data-theme-val="cyan" onclick="setAppTheme('cyan');updateActive(this)">
+      <span class="dot" style="background:#0284c7"></span>极光电青蓝
+    </div>
+    <div class="tp" data-theme-val="emerald" onclick="setAppTheme('emerald');updateActive(this)">
+      <span class="dot" style="background:#059669"></span>翡翠高能绿
+    </div>
+    <div class="tp" data-theme-val="gold" onclick="setAppTheme('gold');updateActive(this)">
+      <span class="dot" style="background:#d97706"></span>黑曜琥珀金
+    </div>
+    <div class="tp" data-theme-val="purple" onclick="setAppTheme('purple');updateActive(this)">
+      <span class="dot" style="background:#5b5fc7"></span>经典紫罗兰
+    </div>
+  </div>
+</div>
+
+<script>
+  function updateActive(el) {
+    document.querySelectorAll('.tp').forEach(function(p) { p.classList.remove('on'); });
+    if (el) el.classList.add('on');
+  }
+  window.addEventListener('DOMContentLoaded', function() {
+    var cur = localStorage.getItem('app-theme') || 'orange';
+    var activePill = document.querySelector('.tp[data-theme-val="' + cur + '"]');
+    if (activePill) updateActive(activePill);
+  });
+</script>
+
+<p class="lead">
+  多数屏对应 <code>shared/src/commonMain/kotlin/com/woo/kuiklycomposetemplate/session/</code> 下的
+  Composable。文案、数值、间距都取自 Kotlin 代码：<code>dp</code> / <code>sp</code> 按 1:1 映射成
+  <code>px</code>，颜色来自 <code>SessionTheme.kt</code> 的 <code>object S</code>，
+  训练内容来自 <code>SessionModel.kt</code> 的 <code>glutesLegsSession</code>（臀腿 · 5 个动作 · 17 个组位，含热身）。
+  顶部画出 iOS 状态栏和小程序胶囊，是因为 Kotlin 侧的顶栏留白
+  （<code>statusBarHeight + S.capsuleHeight</code>、<code>S.capsuleReserve</code>）就是为它们让位的。
+  改设计稿之前先对一遍对应的 Composable，避免两边对不上。
+</p>
+<p class="lead">
+  <strong>「动作配置」</strong>（已合并原「编辑动作」与「新建自定义动作」）支持「计划编排」与「练中临时添加」双场景，包含杠铃片算盘、器械孔位备忘及生效范围；「休息时长」为辅助设计稿。
+</p>
+<p class="lead">
+  「三大项数据」「训练原则」「完整计划」「三个训练日」及「本周期递进」对应
+  <a href="https://github.com/Jmdyy/KaishengwangXTanchengyi">KaishengwangXTanchengyi</a>，
+  该仓库已经落到本地 <code>com/woo/kuiklycomposetemplate/training/</code>，
+  所以这几屏的文案和数值直接取自 Kotlin 而不是上游 TS：
+  动作内容来自 <code>TrainingPlan.kt</code> 的 <code>trainingPlan</code>（3 个训练日 × 5 个动作，共 15 个），
+  卡片结构照 <code>ExerciseCard.kt</code>，建议重量徽标的三种颜色对应
+  <code>WeightDisplay.kt</code> 里 LINEAR / SEMI / FIXED 三个分支。
+  推算链路是 <strong>三大项 1RM → 动作系数 → 目标次数对应的 RPE 8 百分比 → 取整到 2.5 kg
+  → 按本周期第几次训练 +2.5 kg</strong>（<code>WeightCalculator.kt</code>）。
+  所有建议重量都是按 <strong>深蹲 90 / 卧推 70 / 硬拉 120</strong> 跑一遍该算法算出来的，不是估的。
+  这套东西在这里不是独立的一块，而是叠在原有逐组记录流程上的<strong>建议重量</strong>层 ——
+  记录页的步进器仍然可以随手改，建议值只负责给一个起点。
+</p>
+<p class="lead">
+  训练日三屏里的橙色<strong>「实现注意」</strong>块不是给用户看的文案，
+  是照着算法跑数时发现的边界：<code>parseTargetReps</code> 只取 reps 字符串里的第一个数字，
+  自重动作（双杠臂屈伸、山羊挺身）的系数表达不了「总负荷 vs 外加配重」，
+  带组内 rest-pause 的动作也没法用单一组间休息时长描述。真要实现先解掉这几条。
+</p>
+<p class="lead">
+  标了 <strong>v2</strong> 的页面是深度融合十年以上力量训练实战体验的优化稿：
+  <strong>一、热身组与正式组隔离</strong>：支持一键生成热身阶梯，热身不污染正式容量与 RPE 自动调节；
+  <strong>二、同组镜像与历史天花板 PR</strong>：每组输入下方对标上次同组表现与历史个人最佳纪录；
+  <strong>三、数字大键盘与快捷配重</strong>：点击大字直呼九宫格大键盘，支持 +2.5/+5/+10 快捷加片；
+  <strong>四、单侧动作弱侧保护</strong>：单腿/单手动作分别记录左右次数，以弱侧定有效正式组；
+  <strong>五、肌群超量恢复雷达与出门装备清单</strong>：科学指引部位恢复状态，出门前提醒腰带/护膝/拉力带；
+  <strong>六、灵活调度与超级组穿插</strong>：支持临时插入休息日、调换部位及一键绑定孤立超级组；
+  <strong>七、老铁极简纯黑硬核战报卡</strong>：结算页一键生成纯黑高对比度战报图与文本，方便打卡交流。
+</p>
+
+<div class="grid">
+
+  <figure>
+    <iframe src="home-v2.html" title="v2 · 今日训练首页"></iframe>
+    <figcaption>
+      <div class="name">v2 · 今日训练首页 <code>home-v2.html</code></div>
+      <div class="src">优化稿 · 替代原 home.html</div>
+      <div class="note">
+        循环位置从「本周完成 1/5」改成 D1/D2/D3 循环；支持「🛌 今天休息」与「⇄ 换部位」；
+        集成「⚡充沛 / 🔋疲惫降重10%」状态就绪度切换、出差/停训「✈️复训保护模式」与「肌群超量恢复雷达」。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="record-v2.html" title="v2 · 逐组记录（资深特化版）"></iframe>
+    <figcaption>
+      <div class="name">v2 · 逐组记录 <code>record-v2.html</code></div>
+      <div class="src">实战特化 · 替代原 record.html</div>
+      <div class="note">
+        实战细节全齐备：① 晚高峰「🔄 器械排队调换顺序」；② 突破极限「👑 NEW PR 暗金高光激励」；③ 缺氧解药「🧮 杠铃彩色挂片指南」；④ 关节保护「🪜 科学热身阶梯」与「🩹 无痛安全变式」。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="progression-v2.html" title="v2 · 本周期递进（含减载周）"></iframe>
+    <figcaption>
+      <div class="name">v2 · 本周期递进 <code>progression-v2.html</code></div>
+      <div class="src">优化稿 · 替代原 progression.html</div>
+      <div class="note">
+        8 次训练压成柱状条看趋势；支持「✈️ 出差/断训复训保护」与随时「🛌 主动开启 1 周减载 (Deload)」；
+        明确给出周期结束、连续停滞、停训重测 1RM 的科学出口。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="plan-edit.html" title="训练计划编排"></iframe>
+    <figcaption>
+      <div class="name">训练计划编排 <code>plan-edit.html</code></div>
+      <div class="src">计划自定义</div>
+      <div class="note">
+        三分化是框架，但可以自己增删动作、调整顺序。
+        每个动作设置：名称、重量、组数、次数、休息时长、递进方式。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="exercise-edit.html" title="动作配置（统一合并版）"></iframe>
+    <figcaption>
+      <div class="name">动作配置 <code>exercise-edit.html</code></div>
+      <div class="src">统一表单 · 合并 custom-exercise.html</div>
+      <div class="note">
+        同时满足「计划编排」与「练中临时加动作」双场景。
+        完整支持：① 递进逻辑与超负荷策略说明；② 执行要点口诀与器械孔位备忘；③ 关联三大项 1RM 智能推算依据；④ 杠铃片算盘与生效范围。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="sheet.html" title="本次全部动作"></iframe>
+    <figcaption>
+      <div class="name">本次全部动作 <code>sheet.html</code></div>
+      <div class="src">AllExercisesSheet.kt</div>
+      <div class="note">
+        每个动作一行组号，已记录的组点进去可以回改，未到的组也允许直接跳。
+        底部「新建自定义动作」直通统一动作配置页。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="summary.html" title="本次训练完成"></iframe>
+    <figcaption>
+      <div class="name">本次训练完成 <code>summary.html</code></div>
+      <div class="src">SessionSummaryPage.kt · SessionSummaryScreen</div>
+      <div class="note">
+        顶栏展示完成组数、总容量与「训练时长」；增加「今日超负荷突破 (PR)」高光卡表彰进步；
+        单组明细已清理多余感受标签，数据与 v2 模型完全一致。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="rest-duration.html" title="手动修改休息时长"></iframe>
+    <figcaption>
+      <div class="name">手动修改休息时长 <code>rest-duration.html</code></div>
+      <div class="src">待实现 · 作用于 RestTimer</div>
+      <div class="note">
+        两个入口：目标行后面的「改」（休息还没开始时用）、休息卡里的「修改休息时长」。
+        ±15 秒步进加常用时长快选，应用范围默认「本动作后续所有组」——
+        改一次管到这个动作做完，不用每组都调。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="one-rep-max.html" title="三大项数据"></iframe>
+    <figcaption>
+      <div class="name">三大项数据 <code>one-rep-max.html</code></div>
+      <div class="src">待实现 · 对应上游 HomePage + LiftInput</div>
+      <div class="note">
+        整套建议重量的入口：这三个数没填，后面每个动作的建议值都是 0。
+        记得住 1RM 的直接填，记不住的用一组次要重量按 Brzycki 反推 ——
+        两种方式在同一张卡里切，公式写出来，用户才知道这个数不是凭空给的。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="principles.html" title="训练原则"></iframe>
+    <figcaption>
+      <div class="name">训练原则 <code>principles.html</code></div>
+      <div class="src">待实现 · 对应上游 PrinciplesPage</div>
+      <div class="note">
+        把「RPE 8 到底是什么感觉」「什么时候可以练到失败」讲清楚 ——
+        自评 RPE 是递进的输入，理解错了整条链路都会偏。
+        休息节奏刻意不写死：恢复得过来就练三休一，不然练二休一。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="plan.html" title="完整计划"></iframe>
+    <figcaption>
+      <div class="name">完整计划 · 15 个动作 <code>plan.html</code></div>
+      <div class="src">待实现 · TrainingPlan.kt 的 trainingPlan</div>
+      <div class="note">
+        三大项放最上面，因为下面每一个建议重量都是从这三个数推出来的。
+        每天 5 个动作压成紧凑行，重量列定宽右对齐，扫一眼就知道今天大概要上多少。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="day-push.html" title="Day 1 推日"></iframe>
+    <figcaption>
+      <div class="name">Day 1 · 推日 <code>day-push.html</code></div>
+      <div class="src">待实现 · DayPage(1) + ExerciseCard</div>
+      <div class="note">
+        杠铃卧推 45 / 哑铃上斜 17.5 单手 / 双杠 42.5 / 仰卧臂屈伸 7.5 单手 / Y字侧平举 2.5 单手。
+        主项绿标（线性递进）、辅项橙标（起步值）、单关节蓝标（固定重量），
+        颜色本身就说明了这个数会不会往上走。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="day-pull.html" title="Day 2 拉日"></iframe>
+    <figcaption>
+      <div class="name">Day 2 · 拉日 <code>day-pull.html</code></div>
+      <div class="src">待实现 · DayPage(2) + ExerciseCard</div>
+      <div class="note">
+        单手下拉 32.5 / 对握下拉 62.5 / 单手划船 50 / 坐姿开肘划船 32.5 / 钢线弯举 7.5。
+        对握下拉是这天唯一鼓励上重量的动作，所以只有它挂了递进入口。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="day-legs.html" title="Day 3 腿日"></iframe>
+    <figcaption>
+      <div class="name">Day 3 · 腿日 <code>day-legs.html</code></div>
+      <div class="src">待实现 · DayPage(3) + ExerciseCard</div>
+      <div class="note">
+        单腿硬拉 20 单手 / 保加利亚 20 单手 / 颈前深蹲 55 / 罗马尼亚硬拉 70 / 山羊挺身 20。
+        以后侧链为主，5 个动作里 3 个挂在硬拉 1RM 上，只有深蹲和保加利亚走深蹲 ——
+        硬拉那个数填错，这一天大半会跟着偏。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="history-calendar.html" title="训练记录 · 日历与成就统计"></iframe>
+    <figcaption>
+      <div class="name">训练日历与成就 <code>history-calendar.html</code></div>
+      <div class="src">HistoryCalendarPage.kt · 「记录」Tab</div>
+      <div class="note">
+        以月度日历热力打卡直观统计训练成果；展示出勤天数、月累计吨位、总活跃时长与 PR 突破数；
+        点选任意日期可展开当日详细动作组数与战报。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="profile.html" title="我的 · 个人资料与身体数据"></iframe>
+    <figcaption>
+      <div class="name">个人资料与设置 <code>profile.html</code></div>
+      <div class="src">ProfilePage.kt · 「我的」Tab</div>
+      <div class="note">
+        包含身高、当前体重、目标体重、体脂率、骨骼肌量及 DOTS 力量系数评分；
+        集中管理三大项 1RM 档案、主题配色方案、振动反馈与数据导出备份。
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure>
+    <iframe src="knowledge.html" title="知识库 · 力量训练理论与大纲"></iframe>
+    <figcaption>
+      <div class="name">训练知识库 <code>knowledge.html</code></div>
+      <div class="src">KnowledgeBasePage.kt · 「知识」Tab</div>
+      <div class="note">
+        替代原占位饮食页。系统性聚合三大理论支柱：① 官方三分化大纲与 D1/D2/D3 蓝图；② RPE 与渐进超负荷原则；③ Brzycki 极限推算与弱侧保护常识。
+      </div>
+    </figcaption>
+  </figure>
+
+</div>
+
+</body>
+</html>

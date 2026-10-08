@@ -10,7 +10,12 @@ plugins {
 }
 
 buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
     dependencies {
+        classpath("com.android.tools:r8:8.3.37")
         classpath(BuildPlugin.kuikly)
     }
 }
